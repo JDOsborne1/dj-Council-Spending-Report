@@ -37,7 +37,7 @@ generateLinksFromPage <- function(url){
 dataExtraction <- function(links, control_links = TRUE){
         extract <- links %>% 
                 restrictLinks(control_links) %>% 
-                dplyr::mutate(extracted_data = purrr::map(link, readr::read_csv)) %>% 
+                dplyr::mutate(extracted_data = purrr::map(link, function(x) {print(x); readr::read_csv(x)})) %>% 
                 dplyr::mutate(extracted_data = purrr::map(extracted_data, alterNames, make.names))
         
         ## Check if the colnames are all the same

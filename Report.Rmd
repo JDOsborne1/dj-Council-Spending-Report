@@ -24,6 +24,8 @@ I will use this data to answer the following questions:
 
 This report leverages R to scrape the above webpage for the data links and brings all the data together to support any conclusions. The code is abstracted for the purposes of clarity, but can be viewed and reused at leisure [here](http://a.link.webpage/).
 
+One comment to be made is that while there seems to ber a standard across open data providers to make the data available in monthly or quarterly chunks, those chunks are themselves rarely uniform. In the case of this data, there appears to be a minimal or inconsistent standard in naming files. In addition, the column names change between data which is ostensibly recording the same information. In some cases, there are files which have been saved as .xlsx format and which have additional empty sheets which serve no purpose. These files have then simply been renamed to .csv format. 
+
 
 
 ## - TESTING SECTION 
@@ -38,6 +40,8 @@ links <- generateLinksFromPage("https://www.southglos.gov.uk/business/tenders-an
 ```{r Extracting data from page}
 
 extract <- links %>% 
+        dplyr::filter(link != "http://www.southglos.gov.uk//documents/2-May-2018-Invoices-ALL-Paid-over-£500-for-web-publish.csv") %>% 
+        tail(40) %>% 
         dataExtraction(control_links = FALSE)
 
 ```
