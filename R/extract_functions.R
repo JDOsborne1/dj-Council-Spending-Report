@@ -37,7 +37,7 @@ generateLinksFromPage <- function(url){
 dataExtraction <- function(links, control_links = TRUE){
         extract <- links %>% 
                 restrictLinks(control_links) %>% 
-                dplyr::mutate(extracted_data = purrr::map(link, function(x) {print(x); readr::read_csv(x)})) %>% 
+                dplyr::mutate(extracted_data = purrr::map(link, customDataReader)) %>% 
                 dplyr::mutate(extracted_data = purrr::map(extracted_data, alterNames, make.names))
         
         ## Check if the colnames are all the same
@@ -55,6 +55,43 @@ dataExtraction <- function(links, control_links = TRUE){
                 tidyr::unnest(cols = extracted_data)
 }
 
+
+#' Custom reader function for south glos payment data
+#'
+#' @param x 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+customDataReader <- function(URL) {
+        print(URL)
+        temp <- tempfile()
+        
+        URL %>% 
+                download.file(temp, method = "libcurl", mode = "wb")
+        
+        if(!is.na(readxl::excel_format(temp))){
+                print("Excel Formatting :|")
+                readxl::read_excel(temp)
+        } else {
+                data.table::fread(
+                        temp
+                        , data.table = FALSE
+                        , select = c(
+                                "Ref",
+                                "Fund Type",
+                                "Dept",
+                                "Cost Centre Description",
+                                "Description",
+                                "Creditor Name",
+                                "GL Code Net Amount",
+                                "Payment date"
+                                )
+                )
+                }
+        
+}
 
 # Munging functions -------------------------------------------------------
 
