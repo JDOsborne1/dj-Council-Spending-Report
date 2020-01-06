@@ -26,6 +26,8 @@ This report leverages R to scrape the above webpage for the data links and bring
 
 One comment to be made is that while there seems to be a standard across open data providers to make the data available in monthly or quarterly chunks, those chunks are themselves rarely uniform. In the case of this data, there appears to be a minimal or inconsistent standard in naming files. In addition, the column names change between data which is ostensibly recording the same information. In some cases, there are files which have been saved as .xlsx format and which have additional empty sheets which serve no purpose. These files have then simply been renamed to .csv format. 
 
+There are cases where the csv files have additional columns made up of blank entries. This tricks the reader in to looking for data in those columns, and when the extra blank rows disappear it causes parsing errors. In certain files there is also breaks between each of the Department records to include what is most likely a summary value. 
+
 
 ## - TESTING SECTION 
 
@@ -39,9 +41,7 @@ links <- generateLinksFromPage("https://www.southglos.gov.uk/business/tenders-an
 ```{r Extracting data from page}
 
 extract <- links %>% 
-        dplyr::filter(link != "http://www.southglos.gov.uk//documents/2-May-2018-Invoices-ALL-Paid-over-£500-for-web-publish.csv") %>% 
-        tail(40) %>% 
-        dataExtraction(control_links = F)
+    dataExtraction(control_links = F)
 
 
 
@@ -95,11 +95,12 @@ Will need to customise either curl::curl_download or download.file
 
 
 ```{r}
-readr::problems(
     
-"http://hosted.southglos.gov.uk/councilpayments/november10.csv" %>% 
+URL <- "http://hosted.southglos.gov.uk/councilpayments/november10.csv"
+test2 <- "https://www.southglos.gov.uk//documents/Sep-2019-Payments-Over-500.csv" %>% customDataReader()
+
+URL %>% 
     customDataReader()
-)
 ```
 
 

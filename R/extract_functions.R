@@ -73,22 +73,23 @@ customDataReader <- function(URL) {
         
         if(!is.na(readxl::excel_format(temp))){
                 print("Excel Formatting :|")
-                readxl::read_excel(temp)
+                readxl::read_excel(temp) %>% 
+                        # since we cannot assume a constant columnname for the excel files, we make the assumption 
+                        # that one of the first and second column will be missing in the summary elements
+                        dplyr::filter(!is.na(.[1]) & !is.na(.[2]))
         } else {
-                data.table::fread(
+                
+                raw_temp <- readLines(temp)
+                
+                # remove the cases with only a summary total value
+                refined_temp <- raw_temp[!grepl("^,*\\S*,*$", raw_temp)]
+                # removing any extra commas at the end of the csv
+                refined_temp2 <- gsub(",*$", ",", refined_temp)
+                writeLines(refined_temp2, temp)
+                readr::read_csv(
                         temp
-                        , data.table = FALSE
-                        , select = c(
-                                "Ref",
-                                "Fund Type",
-                                "Dept",
-                                "Cost Centre Description",
-                                "Description",
-                                "Creditor Name",
-                                "GL Code Net Amount",
-                                "Payment date"
-                                )
-                )
+                ) %>% 
+                        dplyr::select(-dplyr::starts_with("X"))
                 }
         
 }
