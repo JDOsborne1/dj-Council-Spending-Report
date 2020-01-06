@@ -95,9 +95,9 @@ Will need to customise either curl::curl_download or download.file
 
 
 ```{r}
-    
-URL <- "http://hosted.southglos.gov.uk/councilpayments/november10.csv"
-test2 <- "https://www.southglos.gov.uk//documents/Sep-2019-Payments-Over-500.csv" %>% customDataReader()
+URL_404_failure <- "http://www.southglos.gov.uk//documents/2-May-2018-Invoices-ALL-Paid-over-£500-for-web-publish.csv"    
+URL_parsing_failure_1 <- "http://www.southglos.gov.uk//documents/December-2018-Invoices-All-Paid-Over-500-for-web-publishing.csv"
+URL_parsing_failure_2 <- "https://www.southglos.gov.uk//documents/Payments-Over-500-July-2019.csv"
 
 URL %>% 
     customDataReader()
