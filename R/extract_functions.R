@@ -14,7 +14,7 @@ library(magrittr)
 #' @examples
 generateLinksFromPage <- function(url){
         url %>% 
-                xml2::read_html() %>% 
+                xml2::read_html(encoding = "UTF-8") %>% 
                 rvest::html_nodes("a") %>% 
                 rvest::html_attr("href") %>%
                 tibble::enframe(name = NULL,value = "link")
