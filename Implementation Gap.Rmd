@@ -1,0 +1,17 @@
+---
+title: 'On Data Transparency: The implementation Gap'
+author: "Joseph Osborne"
+date: "06/01/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is a framework to discuss a potential talk on the realities of data transparency at a government level, the various factors which need to be considered by governmental bodies when deciding what data to share and in what way. 
+
+covering such topics as:
+
+- The legislation and implementation gap: Keyword of Machine Interpretable
+- Accountability vs Privacy and how that determines what is shared
