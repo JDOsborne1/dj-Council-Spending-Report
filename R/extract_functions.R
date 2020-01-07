@@ -69,6 +69,8 @@ customDataReader <- function(URL) {
         temp <- tempfile()
         
         URL %>% 
+                {`Encoding<-`(., "latin1")} %>% 
+                {gsub("Â", "", .)} %>% 
                 download.file(temp, method = "libcurl", mode = "wb")
         
         if(!is.na(readxl::excel_format(temp))){
