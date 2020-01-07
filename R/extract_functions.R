@@ -83,8 +83,8 @@ customDataReader <- function(URL) {
                 
                 raw_temp <- readLines(temp)
                 
-                # remove the cases with only a summary total value
-                refined_temp <- raw_temp[!grepl("^,*\\S*,*$", raw_temp)]
+                # remove the cases with more than 2 missing values adjacent
+                refined_temp <- raw_temp[!grepl(",,,", raw_temp)]
                 # removing any extra commas at the end of the csv
                 refined_temp2 <- gsub(",*$", ",", refined_temp)
                 writeLines(refined_temp2, temp)
