@@ -85,6 +85,7 @@ customDataReader <- function(URL) {
                 
                 # remove the cases with more than 2 missing values adjacent
                 refined_temp <- raw_temp[!grepl(",,,", raw_temp)]
+                print(paste0("number of rows removed:", sum(grepl(",,,", raw_temp))))
                 # removing any extra commas at the end of the csv
                 refined_temp2 <- gsub(",*$", ",", refined_temp)
                 writeLines(refined_temp2, temp)
