@@ -95,12 +95,22 @@ Will need to customise either curl::curl_download or download.file
 
 
 ```{r}
-URL_404_failure <- "http://www.southglos.gov.uk//documents/2-May-2018-Invoices-ALL-Paid-over-£500-for-web-publish.csv"    
+# Phase 1
+URL_404_failure <- "http://www.southglos.gov.uk//documents/2-May-2018-Invoices-ALL-Paid-over-Â£500-for-web-publish.csv"    
 URL_parsing_failure_1 <- "http://www.southglos.gov.uk//documents/December-2018-Invoices-All-Paid-Over-500-for-web-publishing.csv"
 URL_parsing_failure_2 <- "https://www.southglos.gov.uk//documents/Payments-Over-500-July-2019.csv"
 
-URL %>% 
-    customDataReader()
+
+#Phase 2
+URL_parsing_failure_3 <- "http://hosted.southglos.gov.uk/councilpayments/June17.csv"
+URL_parsing_failure_4 <- "http://hosted.southglos.gov.uk/councilpayments/Nov16.csv"
+URL_parsing_failure_5 <- "http://hosted.southglos.gov.uk/councilpayments/june16.csv"
+URL_parsing_failure_6 <- "http://hosted.southglos.gov.uk/councilpayments/march15.csv"
+URL_parsing_failure_7 <- "http://hosted.southglos.gov.uk/councilpayments/december12.csv"
+URL_parsing_failure_8 <- "http://hosted.southglos.gov.uk/councilpayments/october10.csv"
+URL_parsing_failure_9 <- "http://hosted.southglos.gov.uk/councilpayments/june10.csv"
+
+test <- customDataReader(URL = URL_parsing_failure_4)
 ```
 
 
