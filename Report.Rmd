@@ -7,6 +7,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
 ```
 
 ## Introduction
@@ -41,7 +43,7 @@ links <- generateLinksFromPage("https://www.southglos.gov.uk/business/tenders-an
 ```{r Extracting data from page}
 
 extract <- links %>% 
-    dataExtraction(control_links = F)
+    dataExtraction(control_links = T)
 
 
 
@@ -58,18 +60,25 @@ refined_extract <- extract %>%
 ```{r Generating a basic view of the spending}
 library(dplyr)
 date_level_spending_data <- refined_extract %>% 
+        arrange(Payment.date) %>% 
+        mutate(Total.Spend.so.far = cumsum(GL.Code.Net.Amount)) %>% 
         group_by(Payment.date) %>% 
-        summarise(Total.Spend = sum(GL.Code.Net.Amount))
+        filter(Total.Spend.so.far == max(Total.Spend.so.far)) %>% 
+        ungroup()
 
+dept_level_spending_data <- refined_extract %>% 
+    group_by(Dept, month = lubridate::floor_date(Payment.date, unit = "months")) %>% 
+        summarise(total.spend = sum(GL.Code.Net.Amount))
 
 
 ```
 
 ```{r experimenting with the plot}
-library(ggplot2)
+
 date_level_spending_plot <- date_level_spending_data %>% 
-        ggplot(aes(x = Payment.date, y = Total.Spend)) +
+        ggplot(aes(x = Payment.date, y = Total.Spend.so.far)) +
         geom_line(colour = '#CC2D2D',size = 2,linetype = 1,alpha = 0.67) + 
+    scale_y_continuous(labels = function(x) scales::dollar(x, prefix = "£"))+
     theme_classic() +
     theme(
         plot.subtitle = element_text(size = 13, hjust = 0.01, vjust = 1)
@@ -88,6 +97,23 @@ date_level_spending_plot <- date_level_spending_data %>%
         )
 date_level_spending_plot
 ```
+
+```{r Looking at spend by department}
+date_formatter_base <- scales::date_format(format = "%B", tz = "UTC")
+date_formatter <- 
+
+
+dept_level_spending_plot <- dept_level_spending_data %>% 
+    ggplot(aes(x = month, y = total.spend, colour = Dept)) +
+    geom_line(aes(group = Dept)) +
+    geom_point() +
+    scale_x_date(labels = date_formatter_base) +
+    theme_classic() 
+dept_level_spending_plot
+
+```
+
+
 
 -- Construct a specialised reader function which wraps both read_csv and read_excel. Also need to adjust for the 404 failures of certain extractions
 Will need to customise either curl::curl_download or download.file
