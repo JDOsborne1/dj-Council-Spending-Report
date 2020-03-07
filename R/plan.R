@@ -1,5 +1,7 @@
 library(drake)
 library(data.table)
+library(tools)
+
 
 source(here::here("R/extract_functions.R"))
 parsing_failures <- c( 
@@ -24,7 +26,7 @@ parsing_failures <- c(
 
 link_list <- readd(refined_links)$link
 data_load_plan <- drake_plan(
-        max_expand = Inf
+        max_expand = 8
         # Extracts the links from the payments page, refreshing each month
         , links = target(
                 command = generateLinksFromPage(
@@ -44,7 +46,7 @@ data_load_plan <- drake_plan(
         )
         
         , Refined_Reader_Output = target(
-                filter(Reader_Output, naIndexer(Reader_Output))
+                refineReaderOutput(Reader_Output)
                 , transform = map(
                         Reader_Output 
                 )
