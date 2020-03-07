@@ -64,8 +64,8 @@ dataExtraction <- function(links, control_links = TRUE){
 #' @export
 #'
 #' @examples
-customDataReader <- function(URL) {
-        print(URL)
+customDataReader <- function(URL, .missing_threshold = 0.8) {
+        # print(URL)
         temp <- tempfile()
         
         URL %>% 
@@ -76,26 +76,38 @@ customDataReader <- function(URL) {
         if(!is.na(readxl::excel_format(temp))){
                 print("Excel Formatting :|")
                 readxl::read_excel(temp) %>% 
-                        # since we cannot assume a constant columnname for the excel files, we make the assumption 
-                        # that one of the first and second column will be missing in the summary elements
-                        dplyr::filter(!is.na(.[1]) & !is.na(.[2]))
+                        dplyr::select_if(function(x) propNA(x) < .missing_threshold)
         } else {
                 
-                raw_temp <- readLines(temp)
+                # raw_temp <- readLines(temp)
                 
                 # remove the cases with more than 2 missing values adjacent
-                refined_temp <- raw_temp[!grepl(",,,", raw_temp)]
-                print(paste0("number of rows removed:", sum(grepl(",,,", raw_temp))))
+                # refined_temp <- raw_temp[!grepl(",,,", raw_temp)]
+                # print(paste0("number of rows removed:", sum(grepl(",,,", raw_temp))))
                 # removing any extra commas at the end of the csv
-                refined_temp2 <- gsub(",*$", ",", refined_temp)
-                writeLines(refined_temp2, temp)
-                readr::read_csv(
+                # refined_temp2 <- gsub("*,$", ",", raw_temp)
+                # writeLines(refined_temp2, temp)
+                output <- readr::read_csv(
                         temp
                 ) %>% 
-                        dplyr::select(-dplyr::starts_with("X"))
+                        dplyr::select_if(function(x) propNA(x) < .missing_threshold)
                 }
         
 }
+
+naIndexer <- function(.input_ds, .threshold = 2){
+        output_slice <- dplyr::mutate_all(.input_ds, is.na) %>% 
+                rowSums() %>% 
+                {. < .threshold}
+        print(paste0("Slicing out ", sum(!output_slice), " rows with too many missings"))
+        output_slice
+}
+
+propNA <- function(.input_vect) {
+        sum(is.na(.input_vect))/length(.input_vect)
+        }
+
+
 
 # Munging functions -------------------------------------------------------
 
