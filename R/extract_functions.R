@@ -95,6 +95,18 @@ customDataReader <- function(URL, .missing_threshold = 0.8) {
         
 }
 
+#' NA values indexer
+#'
+#' @description Function to determine the row indicies where there are above a
+#'   certain threshold of missing values in that row.
+#'
+#' @param .input_ds
+#' @param .threshold
+#'
+#' @return
+#' @export
+#'
+#' @examples
 naIndexer <- function(.input_ds, .threshold = 2){
         output_slice <- dplyr::mutate_all(.input_ds, is.na) %>% 
                 rowSums() %>% 
@@ -103,10 +115,42 @@ naIndexer <- function(.input_ds, .threshold = 2){
         output_slice
 }
 
+#' NA Proportion
+#'
+#' @description Function to determine what proportion of the input vector is
+#'   made up of missing values.
+#'
+#' @param .input_vect
+#'
+#' @return
+#' @export
+#'
+#' @examples
 propNA <- function(.input_vect) {
         sum(is.na(.input_vect))/length(.input_vect)
         }
 
+#' Reader output refinement
+#'
+#' @description Function to refine the output of the reader function into a
+#'   standardised format which can be brought together in the drake plan.
+#'
+#'   In the process it does the following
+#'
+#'   1. Use the NA values indexer to determine which rows have too many missing
+#'   values
+#'   2. Modifying all the column names to have a consistent formatting
+#'   3. Unifies the multiple aliases for the same value
+#'   4. Adds in any missing columns
+#'   5. Handles any rogue characters in the dates
+#'   6. Transforms all the dates into date type
+#'
+#' @param .raw_data
+#'
+#' @return
+#' @export
+#'
+#' @examples
 refineReaderOutput <- function(.raw_data){
         output <- .raw_data %>% 
                 {dplyr::filter(., naIndexer(.))} %>% 
