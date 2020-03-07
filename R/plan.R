@@ -49,5 +49,12 @@ data_load_plan <- drake_plan(
                         Reader_Output 
                 )
         )
-
+        
+        # Currently failing, what is needed is an alteration to the refined reader step above, 
+        # so that all the imported files have the same dimensions.
+        # , Output_total = target(
+        #         bind_rows(Refined_Reader_Output)
+        #         , transform = combine(Refined_Reader_Output)
+        # )
+        
 )
