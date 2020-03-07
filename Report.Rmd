@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(ggplot2)
+library(dplyr)
 ```
 
 ## Introduction
@@ -31,44 +32,29 @@ One comment to be made is that while there seems to be a standard across open da
 There are cases where the csv files have additional columns made up of blank entries. This tricks the reader in to looking for data in those columns, and when the extra blank rows disappear it causes parsing errors. In certain files there is also breaks between each of the Department records to include what is most likely a summary value. 
 
 
-## - TESTING SECTION 
 
 ```{r Obtain the links}
-source(here::here("R/extract_functions.R"))
+source(here::here("R/plan.R"))
 
-links <- generateLinksFromPage("https://www.southglos.gov.uk/business/tenders-and-contracts/how-we-spend-our-money/council-payments-over-500/")
-
+make(data_load_plan)
 ```
 
-```{r Extracting data from page}
-# 
-# extract <- links %>% 
-#     dataExtraction(control_links = T)
-# 
 
 
-
-```
-
-```{r Munging and refining the extracted data}
-
-# refined_extract <- extract %>% 
-#         refineData()
-        
-```
 
 ```{r Generating a basic view of the spending}
-library(dplyr)
-date_level_spending_data <- refined_extract %>% 
+
+
+date_level_spending_data <- readd(Output_total)  %>% 
         arrange(Payment.date) %>% 
-        mutate(Total.Spend.so.far = cumsum(GL.Code.Net.Amount)) %>% 
+        mutate(Total.Spend.so.far = cumsum(Gross.amount)) %>% 
         group_by(Payment.date) %>% 
         filter(Total.Spend.so.far == max(Total.Spend.so.far)) %>% 
         ungroup()
 
-dept_level_spending_data <- refined_extract %>% 
+dept_level_spending_data <- readd(Output_total)  %>% 
     group_by(Dept, month = lubridate::floor_date(Payment.date, unit = "months")) %>% 
-        summarise(total.spend = sum(GL.Code.Net.Amount))
+        summarise(total.spend = sum(Gross.amount))
 
 
 ```
@@ -100,7 +86,6 @@ date_level_spending_plot
 
 ```{r Looking at spend by department}
 date_formatter_base <- scales::date_format(format = "%B", tz = "UTC")
-date_formatter <- 
 
 
 dept_level_spending_plot <- dept_level_spending_data %>% 

@@ -30,36 +30,29 @@ data_load_plan <- drake_plan(
 
         # Extracts the links from the payments page, refreshing each month
         , links = target(
-                command = generateLinksFromPage(
+                command = csr_ImpGenerateLinksFromPage(
                 "https://www.southglos.gov.uk/business/tenders-and-contracts/how-we-spend-our-money/council-payments-over-500/"
                 )
                 , trigger = trigger(change = strftime(Sys.Date(), format = "%b"))
         )
         
         , refined_links = links %>%
-                restrictLinks(control = FALSE)
+                csr_PurRestrictLinks(control = FALSE)
         
         , Reader_Output = target(
-                customDataReader(URL = link_list)
+                csr_ImpCustomDataReader(URL = link_list)
                 , transform = map(
                         link_list = !!link_list
                 )
         )
 
         , Refined_Reader_Output = target(
-                refineReaderOutput(Reader_Output)
+                csr_PurRefineReaderOutput(Reader_Output)
                 , transform = map(
                         Reader_Output
                 )
         )
         
-        , Output_total = target(
-                bind_rows(Refined_Reader_Output)
-                , transform = combine(Refined_Reader_Output)
-        )
-
-        # Currently failing, what is needed is an alteration to the refined reader step above,
-        # so that all the imported files have the same dimensions.
         , Output_total = target(
                 bind_rows(Refined_Reader_Output)
                 , transform = combine(Refined_Reader_Output)
