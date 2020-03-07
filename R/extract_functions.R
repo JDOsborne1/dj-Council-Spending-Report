@@ -109,6 +109,18 @@ propNA <- function(.input_vect) {
 
 
 
+refineReaderOutput <- function(.raw_data){
+        output <- .raw_data %>% 
+                {dplyr::filter(., naIndexer(.))} %>% 
+                `colnames<-`(toTitleCase(tolower(make.names(colnames(.)))))
+        if(!"Payment.date" %in% colnames(output)){
+                output <- tibble::add_column(output, Payment.date = as.Date(NA))
+        }
+                dplyr::mutate_at(output, dplyr::vars(Payment.date), as.character)
+                # dplyr::mutate_at(dplyr::vars(Payment.date), lubridate::as_date, format = "%d-%b-%Y", tz = "UTC")
+        
+}
+
 # Munging functions -------------------------------------------------------
 
 

@@ -2,29 +2,28 @@ library(drake)
 library(data.table)
 
 source(here::here("R/extract_functions.R"))
-parsing_failures <- c( 
-        # Phase 1
-        URL_404_failure       = "http://www.southglos.gov.uk//documents/2-May-2018-Invoices-ALL-Paid-over-£500-for-web-publish.csv"    
-        ,URL_parsing_failure_1 = "http://www.southglos.gov.uk//documents/December-2018-Invoices-All-Paid-Over-500-for-web-publishing.csv"
-        ,URL_parsing_failure_2 = "https://www.southglos.gov.uk//documents/Payments-Over-500-July-2019.csv"
-        
-        
-        #Phase 2
-        , URL_parsing_failure_3 = "http://hosted.southglos.gov.uk/councilpayments/June17.csv"
-        , URL_parsing_failure_4 = "http://hosted.southglos.gov.uk/councilpayments/Nov16.csv"
-        , URL_parsing_failure_5 = "http://hosted.southglos.gov.uk/councilpayments/june16.csv"
-        , URL_parsing_failure_6 = "http://hosted.southglos.gov.uk/councilpayments/march15.csv"
-        , URL_parsing_failure_7 = "http://hosted.southglos.gov.uk/councilpayments/december12.csv"
-        , URL_parsing_failure_8 = "http://hosted.southglos.gov.uk/councilpayments/october10.csv"
-        , URL_parsing_failure_9 = "http://hosted.southglos.gov.uk/councilpayments/june10.csv"
-        
-        # Phase 3
-        , URL_parsing_failure_10 = "http://hosted.southglos.gov.uk/councilpayments/november10.csv"
-)
-
+# parsing_failures <- c( 
+#         # Phase 1
+#         URL_404_failure       = "http://www.southglos.gov.uk//documents/2-May-2018-Invoices-ALL-Paid-over-£500-for-web-publish.csv"    
+#         ,URL_parsing_failure_1 = "http://www.southglos.gov.uk//documents/December-2018-Invoices-All-Paid-Over-500-for-web-publishing.csv"
+#         ,URL_parsing_failure_2 = "https://www.southglos.gov.uk//documents/Payments-Over-500-July-2019.csv"
+#         
+#         
+#         #Phase 2
+#         , URL_parsing_failure_3 = "http://hosted.southglos.gov.uk/councilpayments/June17.csv"
+#         , URL_parsing_failure_4 = "http://hosted.southglos.gov.uk/councilpayments/Nov16.csv"
+#         , URL_parsing_failure_5 = "http://hosted.southglos.gov.uk/councilpayments/june16.csv"
+#         , URL_parsing_failure_6 = "http://hosted.southglos.gov.uk/councilpayments/march15.csv"
+#         , URL_parsing_failure_7 = "http://hosted.southglos.gov.uk/councilpayments/december12.csv"
+#         , URL_parsing_failure_8 = "http://hosted.southglos.gov.uk/councilpayments/october10.csv"
+#         , URL_parsing_failure_9 = "http://hosted.southglos.gov.uk/councilpayments/june10.csv"
+#         
+#         # Phase 3
+#         , URL_parsing_failure_10 = "http://hosted.southglos.gov.uk/councilpayments/november10.csv"
+# )
 link_list <- readd(refined_links)$link
 data_load_plan <- drake_plan(
-        max_expand = Inf
+        max_expand = 5
         # Extracts the links from the payments page, refreshing each month
         , links = target(
                 command = generateLinksFromPage(
@@ -33,8 +32,8 @@ data_load_plan <- drake_plan(
                 , trigger = trigger(change = strftime(Sys.Date(), format = "%b"))
         )
         
-        , refined_links = links %>% 
-                restrictLinks(control = FALSE) 
+        , refined_links = links %>%
+                restrictLinks(control = FALSE)
         
         , Reader_Output = target(
                 customDataReader(URL = link_list)
@@ -42,19 +41,19 @@ data_load_plan <- drake_plan(
                         link_list = !!link_list
                 )
         )
-        
+
         , Refined_Reader_Output = target(
-                filter(Reader_Output, naIndexer(Reader_Output))
+                refineReaderOutput(Reader_Output)
                 , transform = map(
-                        Reader_Output 
+                        Reader_Output
                 )
         )
-        
-        # Currently failing, what is needed is an alteration to the refined reader step above, 
+
+        # Currently failing, what is needed is an alteration to the refined reader step above,
         # so that all the imported files have the same dimensions.
-        # , Output_total = target(
-        #         bind_rows(Refined_Reader_Output)
-        #         , transform = combine(Refined_Reader_Output)
-        # )
+        , Output_total = target(
+                bind_rows(Refined_Reader_Output)
+                , transform = combine(Refined_Reader_Output)
+        )
         
 )
