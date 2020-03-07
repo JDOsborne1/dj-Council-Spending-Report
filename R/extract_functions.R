@@ -107,7 +107,21 @@ propNA <- function(.input_vect) {
         sum(is.na(.input_vect))/length(.input_vect)
         }
 
-
+refineReaderOutput <- function(.raw_data){
+        output <- .raw_data %>% 
+                {dplyr::filter(., naIndexer(.))} %>% 
+                `colnames<-`(toTitleCase(tolower(make.names(colnames(.))))) %>% 
+                `colnames<-`(str_replace(colnames(.), "^Ref$", "Ref.no")) %>% 
+                `colnames<-`(str_replace(colnames(.), "^Gl.code.net.amount$", "Gross.amount"))
+        if(!"Payment.date" %in% colnames(output)){
+                output <- tibble::add_column(output, Payment.date = as.Date(NA))
+        }
+        output <-output %>% 
+                dplyr::mutate_at(dplyr::vars(Payment.date), str_replace,  pattern = "^\\[\\]\\s", replacement = "") %>% 
+                dplyr::mutate_at(dplyr::vars(Payment.date), lubridate::as_date, format = "%d-%b-%Y", tz = "UTC")
+        output
+        
+}
 
 refineReaderOutput <- function(.raw_data){
         output <- .raw_data %>% 
