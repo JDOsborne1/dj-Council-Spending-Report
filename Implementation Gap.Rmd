@@ -15,3 +15,12 @@ covering such topics as:
 
 - The legislation and implementation gap: Keyword of Machine Interpretable
 - Accountability vs Privacy and how that determines what is shared
+
+
+## Legislation vs Implementation 
+
+* Look into the relevant regulations around public bodies publishing data
+
+## Accountability vs Privacy
+
+There will always be a trade off to be made when publishing data collected by public bodies, since those bodies are normally in possesion of a unique position of privilledge when it comes to personal level data 
