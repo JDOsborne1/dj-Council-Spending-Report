@@ -136,7 +136,9 @@ csr_PurRefineReaderOutput <- function(.raw_data){
         }
         output <-output %>% 
                 dplyr::mutate_at(dplyr::vars(Payment.date), str_replace,  pattern = "^\\[\\]\\s", replacement = "") %>% 
-                dplyr::mutate_at(dplyr::vars(Payment.date), lubridate::as_date, format = "%d-%b-%Y", tz = "UTC")
+                dplyr::mutate_at(dplyr::vars(Payment.date), lubridate::as_date, format = "%d-%b-%Y", tz = "UTC") %>% 
+                # Introduced since one month in particular was saved with an extra set of data not present in any other month's files
+                select(-one_of(c("Level.3", "Voucher.no", "Invoice.number", "Ledger.code", "Sortkey", "Cost.centre", "Creditor.code", "Creditor.address")))
         output
         
 }
