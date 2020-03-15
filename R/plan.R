@@ -36,6 +36,12 @@ data_load_plan <- drake_plan(
 )
 
 reporting_plan <- drake_plan(
+        
+        
+
+# Looking at the introductory data ----------------------------------------
+
+        
         date_level_spending_data = Output_total  %>% 
                 mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
                 arrange(Payment.date) %>% 
@@ -78,6 +84,18 @@ reporting_plan <- drake_plan(
                 geom_point() +
                 # scale_x_date(labels = date_formatter_base) +
                 theme_classic() 
+        
+
+# Who receives the most money ---------------------------------------------
+        , creditor_level_spending_data = Output_total  %>% 
+                mutate(Amount.Paid = coalesce(Net.amount, Gross.amount))
+        
+        
+        
+
+# Rendering Reports -------------------------------------------------------
+
+        
 
         , spending_report = render(knitr_in(!!here("reports/spending_report.Rmd")))
         , implementation_report = render(knitr_in(!!here("reports/implementation_gap.Rmd")))
