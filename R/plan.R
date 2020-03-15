@@ -1,29 +1,4 @@
-library(drake)
-library(data.table)
-library(tools)
 
-
-source(here::here("R/extract_functions.R"))
-# parsing_failures <- c( 
-#         # Phase 1
-#         URL_404_failure       = "http://www.southglos.gov.uk//documents/2-May-2018-Invoices-ALL-Paid-over-£500-for-web-publish.csv"    
-#         ,URL_parsing_failure_1 = "http://www.southglos.gov.uk//documents/December-2018-Invoices-All-Paid-Over-500-for-web-publishing.csv"
-#         ,URL_parsing_failure_2 = "https://www.southglos.gov.uk//documents/Payments-Over-500-July-2019.csv"
-#         
-#         
-#         #Phase 2
-#         , URL_parsing_failure_3 = "http://hosted.southglos.gov.uk/councilpayments/June17.csv"
-#         , URL_parsing_failure_4 = "http://hosted.southglos.gov.uk/councilpayments/Nov16.csv"
-#         , URL_parsing_failure_5 = "http://hosted.southglos.gov.uk/councilpayments/june16.csv"
-#         , URL_parsing_failure_6 = "http://hosted.southglos.gov.uk/councilpayments/march15.csv"
-#         , URL_parsing_failure_7 = "http://hosted.southglos.gov.uk/councilpayments/december12.csv"
-#         , URL_parsing_failure_8 = "http://hosted.southglos.gov.uk/councilpayments/october10.csv"
-#         , URL_parsing_failure_9 = "http://hosted.southglos.gov.uk/councilpayments/june10.csv"
-#         
-#         # Phase 3
-#         , URL_parsing_failure_10 = "http://hosted.southglos.gov.uk/councilpayments/november10.csv"
-# )
-link_list <- readd(refined_links)$link
 data_load_plan <- drake_plan(
 
         max_expand = Inf
@@ -59,3 +34,57 @@ data_load_plan <- drake_plan(
         )
         
 )
+
+reporting_plan <- drake_plan(
+        date_level_spending_data = Output_total  %>% 
+                mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
+                arrange(Payment.date) %>% 
+                mutate(Total.Spend.so.far = cumsum(Amount.Paid)) 
+        
+        , dept_level_spending_data = Output_total  %>% 
+                mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
+                filter(Payment.date > "2010-01-01") %>% 
+                filter(Payment.date < "2021-01-01") %>% 
+                group_by(Dept, year = lubridate::floor_date(Payment.date, unit = "years")) %>% 
+                summarise(total.spend = sum(Amount.Paid, na.rm = T))
+        
+        
+        , date_level_spending_plot = date_level_spending_data %>% 
+                filter(Payment.date > "2010-01-01") %>% 
+                filter(Payment.date < "2021-01-01") %>% 
+                ggplot(aes(x = Payment.date, y = Total.Spend.so.far)) +
+                geom_line(colour = '#CC2D2D',size = 2,linetype = 1,alpha = 0.67) + 
+                scale_y_continuous(labels = function(x) scales::dollar(x, prefix = "£"))+
+                theme_classic() +
+                theme(
+                        plot.subtitle = element_text(size = 13, hjust = 0.01, vjust = 1)
+                        , plot.caption = element_text(vjust = 1)#
+                        , axis.ticks = element_line(colour = "black")
+                        , axis.title = element_text(face = "bold")
+                        , axis.text = element_text(face = "bold")
+                        , plot.title = element_text(face = "bold")
+                ) + 
+                labs(
+                        title = "Total Daily Spend"
+                        , x = "Payment Day"
+                        , y = "Total Spend"
+                        , subtitle = "The total council spend across all recipient categories"
+                        , caption = "Source: South Gloucestershire Council"
+                )
+        
+        , dept_level_spending_plot = dept_level_spending_data %>% 
+                ggplot(aes(x = year, y = total.spend, colour = Dept)) +
+                geom_line(aes(group = Dept)) +
+                geom_point() +
+                # scale_x_date(labels = date_formatter_base) +
+                theme_classic() 
+
+        , spending_report = render(knitr_in(!!here("reports/spending_report.Rmd")))
+        , implementation_report = render(knitr_in(!!here("reports/implementation_gap.Rmd")))
+        )
+
+full_plan <- bind_plans(
+        data_load_plan
+        , 
+        reporting_plan
+        )
