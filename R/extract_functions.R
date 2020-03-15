@@ -121,8 +121,10 @@ csr_PurRefineReaderOutput <- function(.raw_data){
         output <- .raw_data %>% 
                 {dplyr::filter(., csr_PurNAIndexer(.))} %>% 
                 `colnames<-`(toTitleCase(tolower(make.names(colnames(.))))) %>% 
-                `colnames<-`(str_replace(colnames(.), "^Ref$", "Ref.no")) %>% 
-                `colnames<-`(str_replace(colnames(.), "^Gl.code.net.amount$", "Gross.amount"))
+                `colnames<-`(str_replace(colnames(.), "^Ref$", "Ref.no")) %>%  
+                `colnames<-`(str_replace(colnames(.), "^Ref.no.$", "Ref.no")) %>%  
+                `colnames<-`(str_replace(colnames(.), "^Ref.number$", "Ref.no")) %>%  
+                `colnames<-`(str_replace(colnames(.), "^Gl.code.net.amount$", "Net.amount"))
         if(!"Payment.date" %in% colnames(output)){
                 output <- tibble::add_column(output, Payment.date = as.Date(NA))
         }
