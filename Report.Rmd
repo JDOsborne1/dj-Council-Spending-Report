@@ -47,8 +47,9 @@ make(data_load_plan)
 
 
 date_level_spending_data <- readd(Output_total)  %>% 
+        mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
         arrange(Payment.date) %>% 
-        mutate(Total.Spend.so.far = cumsum(Gross.amount)) %>% 
+        mutate(Total.Spend.so.far = cumsum(Amount.Paid)) %>% 
         group_by(Payment.date) %>% 
         filter(Total.Spend.so.far == max(Total.Spend.so.far)) %>% 
         ungroup()
