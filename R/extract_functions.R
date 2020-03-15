@@ -128,6 +128,12 @@ csr_PurRefineReaderOutput <- function(.raw_data){
         if(!"Payment.date" %in% colnames(output)){
                 output <- tibble::add_column(output, Payment.date = as.Date(NA))
         }
+        if(!"Gross.amount" %in% colnames(output)){
+                output <- tibble::add_column(output, Gross.amount = as.double(NA))
+        }
+        if(!"Net.amount" %in% colnames(output)){
+                output <- tibble::add_column(output, Net.amount = as.double(NA))
+        }
         output <-output %>% 
                 dplyr::mutate_at(dplyr::vars(Payment.date), str_replace,  pattern = "^\\[\\]\\s", replacement = "") %>% 
                 dplyr::mutate_at(dplyr::vars(Payment.date), lubridate::as_date, format = "%d-%b-%Y", tz = "UTC")
