@@ -78,7 +78,10 @@ reporting_plan <- drake_plan(
                 geom_point() +
                 # scale_x_date(labels = date_formatter_base) +
                 theme_classic() 
-)
+
+        , spending_report = render(knitr_in(!!here("reports/spending_report.Rmd")))
+        , implementation_report = render(knitr_in(!!here("reports/implementation_gap.Rmd")))
+        )
 
 full_plan <- bind_plans(
         data_load_plan
