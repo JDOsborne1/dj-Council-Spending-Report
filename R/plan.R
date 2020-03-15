@@ -26,7 +26,7 @@ source(here::here("R/extract_functions.R"))
 link_list <- readd(refined_links)$link
 data_load_plan <- drake_plan(
 
-        max_expand = 4
+        max_expand = Inf
 
         # Extracts the links from the payments page, refreshing each month
         , links = target(
