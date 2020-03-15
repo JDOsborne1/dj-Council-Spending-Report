@@ -51,5 +51,7 @@ readd(dept_level_spending_plot)
 
 
 
+## Sources
 
+Below is a list of sources consulted in the generation of the report. Not all the sources contributed any unique content, but they have all been kept for their value to future investigations. 
 
