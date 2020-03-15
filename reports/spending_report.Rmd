@@ -59,3 +59,5 @@ Below is a list of sources consulted in the generation of the report. Not all th
 * [An analysis on the funding gaps felt by local government](https://www.local.gov.uk/sites/default/files/documents/Technical Document 2020.pdf)
 * [A detailed discussion on business rates and government grants](https://www.local.gov.uk/topics/finance-and-business-rates/local-taxation-council-tax-and-business-rates)
 * [Hansard records of relevant debates](https://hansard.parliament.uk/search/Debates?house=commons)
+* [Census and government data for south gloucestershire](https://www.southglos.gov.uk/council-and-democracy/census/)
+* [Town and parish level population statistics](https://www.southglos.gov.uk/documents/research/key statistics for town and parish councils.pdf)
