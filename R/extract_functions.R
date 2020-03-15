@@ -46,16 +46,19 @@ csr_ImpCustomDataReader <- function(URL, .missing_threshold = 0.8) {
         
         if(!is.na(readxl::excel_format(temp))){
                 print("Excel Formatting :|")
-                readxl::read_excel(temp) %>% 
+                output <- readxl::read_excel(temp) %>% 
                         dplyr::select_if(function(x) csr_PurPropNA(x) < .missing_threshold)
         } else {
                 
                 output <- readr::read_csv(
                         temp
+                        , guess_max = 5000
                 ) %>% 
                         dplyr::select_if(function(x) csr_PurPropNA(x) < .missing_threshold)
                 }
         
+        output %>% 
+                mutate(Source.URL = URL)
 }
 
 #' NA values indexer
@@ -118,15 +121,30 @@ csr_PurRefineReaderOutput <- function(.raw_data){
         output <- .raw_data %>% 
                 {dplyr::filter(., csr_PurNAIndexer(.))} %>% 
                 `colnames<-`(toTitleCase(tolower(make.names(colnames(.))))) %>% 
-                `colnames<-`(str_replace(colnames(.), "^Ref$", "Ref.no")) %>% 
-                `colnames<-`(str_replace(colnames(.), "^Gl.code.net.amount$", "Gross.amount"))
+                `colnames<-`(str_replace(colnames(.), "^Ref$", "Ref.no")) %>%  
+                `colnames<-`(str_replace(colnames(.), "^Ref.no.$", "Ref.no")) %>%  
+                `colnames<-`(str_replace(colnames(.), "^Ref.number$", "Ref.no")) %>%  
+                `colnames<-`(str_replace(colnames(.), "^Gl.code.net.amount$", "Net.amount"))
         if(!"Payment.date" %in% colnames(output)){
                 output <- tibble::add_column(output, Payment.date = as.Date(NA))
         }
+        if(!"Gross.amount" %in% colnames(output)){
+                output <- tibble::add_column(output, Gross.amount = as.double(NA))
+        }
+        if(!"Net.amount" %in% colnames(output)){
+                output <- tibble::add_column(output, Net.amount = as.double(NA))
+        }
         output <-output %>% 
                 dplyr::mutate_at(dplyr::vars(Payment.date), str_replace,  pattern = "^\\[\\]\\s", replacement = "") %>% 
-                dplyr::mutate_at(dplyr::vars(Payment.date), lubridate::as_date, format = "%d-%b-%Y", tz = "UTC")
+                dplyr::mutate_at(dplyr::vars(Payment.date), lubridate::as_date, format = "%d-%b-%Y", tz = "UTC") %>% 
+                dplyr::mutate_at(dplyr::vars(Gross.amount), as.numeric) %>% 
+                dplyr::mutate_at(dplyr::vars(Net.amount), as.numeric) %>% 
+                # Introduced since one month in particular was saved with an extra set of data not present in any other month's files
+                select(-one_of(c("Level.3", "Voucher.no", "Invoice.number", "Ledger.code", "Sortkey", "Cost.centre", "Creditor.code", "Creditor.address")))
         output
+        
+        ## There are some records with dates well outside the reasonable range, which it would be sensible to repair.
+        # At present I have found only 3, but the represent a significant expenditure.
         
 }
 
