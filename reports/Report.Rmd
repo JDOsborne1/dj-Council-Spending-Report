@@ -1,0 +1,55 @@
+---
+title: "Report on Large Spending by South Glos Council"
+author: "Joseph Osborne"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(dplyr)
+library(stringr)
+library(drake)
+```
+
+## Introduction
+
+This report will investigate the spending patterns of South Gloucestershire Council using the data provided by said council [here](https://www.southglos.gov.uk/business/tenders-and-contracts/how-we-spend-our-money/council-payments-over-500/). 
+
+I will use this data to answer the following questions:
+
+1. Who are the most significant recipients of council payments?
+1. Does the volume of outgoings change over time?
+1. Is the majority of the total outgoing value made up of small payments?
+
+
+## Data Sourcing
+
+This report leverages R to scrape the above webpage for the data links and brings all the data together to support any conclusions. The code is abstracted for the purposes of clarity, but can be viewed and reused at leisure [here](http://a.link.webpage/).
+
+One comment to be made is that while there seems to be a standard across open data providers to make the data available in monthly or quarterly chunks, those chunks are themselves rarely uniform. In the case of this data, there appears to be a minimal or inconsistent standard in naming files. In addition, the column names change between data which is ostensibly recording the same information. In some cases, there are files which have been saved as .xlsx format and which have additional empty sheets which serve no purpose. These files have then simply been renamed to .csv format. 
+
+There are cases where the csv files have additional columns made up of blank entries. This tricks the reader in to looking for data in those columns, and when the extra blank rows disappear it causes parsing errors. In certain files there is also breaks between each of the Department records to include what is most likely a summary value. 
+
+```{r experimenting with the plot}
+
+
+readd(date_level_spending_plot)
+```
+
+```{r Looking at spend by department}
+
+
+
+readd(dept_level_spending_plot)
+
+```
+
+
+
+-- Construct a specialised reader function which wraps both read_csv and read_excel. Also need to adjust for the 404 failures of certain extractions
+Will need to customise either curl::curl_download or download.file
+
+
