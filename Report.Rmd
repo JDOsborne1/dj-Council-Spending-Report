@@ -34,7 +34,7 @@ There are cases where the csv files have additional columns made up of blank ent
 
 
 
-```{r Obtain the links}
+```{r Obtain the links, message=FALSE, warning=FALSE}
 source(here::here("R/plan.R"))
 
 make(data_load_plan)
@@ -55,8 +55,11 @@ date_level_spending_data <- readd(Output_total)  %>%
         ungroup()
 
 dept_level_spending_data <- readd(Output_total)  %>% 
-    group_by(Dept, month = lubridate::floor_date(Payment.date, unit = "months")) %>% 
-        summarise(total.spend = sum(Gross.amount))
+        mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
+    filter(Payment.date > "2010-01-01") %>% 
+    filter(Payment.date < "2021-01-01") %>% 
+    group_by(Dept, year = lubridate::floor_date(Payment.date, unit = "years")) %>% 
+        summarise(total.spend = sum(Amount.Paid, na.rm = T))
 
 
 ```
@@ -64,6 +67,7 @@ dept_level_spending_data <- readd(Output_total)  %>%
 ```{r experimenting with the plot}
 
 date_level_spending_plot <- date_level_spending_data %>% 
+    filter(Payment.date > "2010-01-01") %>% 
         ggplot(aes(x = Payment.date, y = Total.Spend.so.far)) +
         geom_line(colour = '#CC2D2D',size = 2,linetype = 1,alpha = 0.67) + 
     scale_y_continuous(labels = function(x) scales::dollar(x, prefix = "£"))+
@@ -91,10 +95,10 @@ date_formatter_base <- scales::date_format(format = "%B", tz = "UTC")
 
 
 dept_level_spending_plot <- dept_level_spending_data %>% 
-    ggplot(aes(x = month, y = total.spend, colour = Dept)) +
+    ggplot(aes(x = year, y = total.spend, colour = Dept)) +
     geom_line(aes(group = Dept)) +
     geom_point() +
-    scale_x_date(labels = date_formatter_base) +
+    # scale_x_date(labels = date_formatter_base) +
     theme_classic() 
 dept_level_spending_plot
 
