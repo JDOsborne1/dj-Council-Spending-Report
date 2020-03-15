@@ -88,10 +88,27 @@ reporting_plan <- drake_plan(
 
 # Who receives the most money ---------------------------------------------
         , creditor_level_spending_data = Output_total  %>% 
-                mutate(Amount.Paid = coalesce(Net.amount, Gross.amount))
-        
-        
-        
+                mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
+                group_by(Creditor.name) %>% 
+                summarise(
+                        Number.of.payments = n()
+                        , Total.payment = sum(Amount.Paid)
+                        , Average.Payment = Total.payment/Number.of.payments
+                        ) %>% 
+                arrange(desc(Total.payment)) %>% 
+                mutate(rank = row_number())
+                                
+                
+        , creditor_plot = creditor_level_spending_data  %>% 
+                filter(rank <=20) %>% 
+                mutate_at(vars(Creditor.name), as_factor) %>% 
+                {
+                ggplot(., aes(x = Creditor.name, y = Total.payment)) +
+                geom_col() +
+                scale_x_discrete(limits = rev(levels(.$Creditor.name))) +
+                coord_flip()
+                }
+                
 
 # Rendering Reports -------------------------------------------------------
 

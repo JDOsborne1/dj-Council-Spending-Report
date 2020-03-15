@@ -51,6 +51,11 @@ readd(dept_level_spending_plot)
 
 ## Which Creditors recieve the most money 
 
+Its first important to note that the creditors are not consitently referred to. Normally they are a company, however sometimes they refer to an address, or even an individual.
+```{r}
+readd(creditor_plot)
+
+```
 
 
 
