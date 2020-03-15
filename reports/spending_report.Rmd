@@ -51,7 +51,5 @@ readd(dept_level_spending_plot)
 
 
 
--- Construct a specialised reader function which wraps both read_csv and read_excel. Also need to adjust for the 404 failures of certain extractions
-Will need to customise either curl::curl_download or download.file
 
 
