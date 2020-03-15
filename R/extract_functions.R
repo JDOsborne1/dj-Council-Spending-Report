@@ -46,16 +46,19 @@ csr_ImpCustomDataReader <- function(URL, .missing_threshold = 0.8) {
         
         if(!is.na(readxl::excel_format(temp))){
                 print("Excel Formatting :|")
-                readxl::read_excel(temp) %>% 
+                output <- readxl::read_excel(temp) %>% 
                         dplyr::select_if(function(x) csr_PurPropNA(x) < .missing_threshold)
         } else {
                 
                 output <- readr::read_csv(
                         temp
+                        , guess_max = 5000
                 ) %>% 
                         dplyr::select_if(function(x) csr_PurPropNA(x) < .missing_threshold)
                 }
         
+        output %>% 
+                mutate(Source.URL = URL)
 }
 
 #' NA values indexer
