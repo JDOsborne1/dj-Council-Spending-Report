@@ -143,6 +143,9 @@ csr_PurRefineReaderOutput <- function(.raw_data){
                 select(-one_of(c("Level.3", "Voucher.no", "Invoice.number", "Ledger.code", "Sortkey", "Cost.centre", "Creditor.code", "Creditor.address")))
         output
         
+        ## There are some records with dates well outside the reasonable range, which it would be sensible to repair.
+        # At present I have found only 3, but the represent a significant expenditure.
+        
 }
 
 
