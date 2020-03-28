@@ -139,13 +139,13 @@ reporting_plan <- drake_plan(
                 arrange(desc(Total.payment)) %>% 
                 mutate(rank = row_number())
 
-        , creditor_plot = creditor_level_spending_data  %>% 
+        , creditor_plot = partially_rectified_creditor_level_spending_data  %>% 
                 filter(rank <=20) %>% 
-                mutate_at(vars(Creditor.name), as_factor) %>% 
+                mutate_at(vars(standard.name), as_factor) %>% 
                 {
-                ggplot(., aes(x = Creditor.name, y = Total.payment)) +
+                ggplot(., aes(x = standard.name, y = Total.payment)) +
                 geom_col() +
-                scale_x_discrete(limits = rev(levels(.$Creditor.name))) +
+                scale_x_discrete(limits = rev(levels(.$standard.name))) +
                 coord_flip()
                 }
                 
