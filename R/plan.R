@@ -106,9 +106,39 @@ reporting_plan <- drake_plan(
                 mutate(rank = row_number())
 
         # Look into the names with the most money. Since they contain 40% of all payments
-        , large_creditor_names = creditor_level_spending_data %>% filter(rank <= 100) %>% pull(Creditor.name) 
-                                
+        , large_creditor_names = creditor_level_spending_data %>% 
+                filter(rank <= 100) %>% 
+                pull(Creditor.name) 
+        , large_creditor_duplicate_lookup = match_list_generation(large_creditor_names, large_creditor_names)
+
+        # While the algorithm can point out likely matches, it's not currently viable to use it to generate a lookup automatically
+        , creditor_name_lookup = tribble(~standard.name, ~secondary.name
+                                         , "Aspects &  Milestones Trust", "Milestones Trust"
+                                         , "Aspects &  Milestones Trust", "Milestones - Unit 10"
+                                         # Worth checking if there is a difference in the below.
+                                         , "Bath & North East Somerset Council", "Bath & North East Somerset Dist Council"
+                                         , "Brandon Trust", "The Brandon Trust"
+                                         , "Brandon Trust", "The Brandon Trust  Olympus House"
+                                         , "Eurotaxis Limited", "Eurotaxis Ltd" 
+                                         , "Freeways Trust Limited", "Freeways Trust Ltd"
+                                         , "Tarmac Trading Limited", "Lafarge Tarmac Trading Limited"
+                                         , "Medequip Assistive Technology Limited", "Medequip Assistive Technology Ltd"
+                                         # The below are actually different legal entities, but almost certainly fill the same role
+                                         , "Network Rail", "Network Rail Infrastructure Limited"
+                                         )
                 
+        , partially_rectified_creditor_level_spending_data = creditor_level_spending_data %>% 
+                left_join(creditor_name_lookup, by = c("Creditor.name" = "secondary.name")) %>% 
+                mutate(standard.name = coalesce(standard.name, Creditor.name)) %>% 
+                group_by(standard.name) %>% 
+                summarise(
+                        Number.of.payments = sum(Number.of.payments)
+                        , Total.payment = sum(Total.payment)
+                        , Average.Payment = Total.payment/Number.of.payments
+                ) %>% 
+                arrange(desc(Total.payment)) %>% 
+                mutate(rank = row_number())
+
         , creditor_plot = creditor_level_spending_data  %>% 
                 filter(rank <=20) %>% 
                 mutate_at(vars(Creditor.name), as_factor) %>% 
