@@ -173,4 +173,50 @@ csr_PurRestrictLinks <- function(tibble_of_links, control = T){
 }
 
 
+#' Parse Date from filename
+#'
+#' @description Since there are some files which do not have the payment data
+#'   contained in the records, it is necessary to infer the month of payment
+#'   using the name of the file.
+#'
+#'   This is notably not functional for those files which are recorded using the
+#'   month and the financial year as reference. A more sophistated function will
+#'   be required in order to acheive that.
+#'
+#' @param filename
+#'
+#' @return
+#' @export
+#'
+#' @examples
+csr_PurDateParseFromFileName <- function(filename){
+        
+        clean_urls <- filename %>% 
+                {gsub("500", "",. )} %>% 
+                # Purposefully breaking the string with a split financial year, since I
+                # do not have a clear way of dealing with them correctly, and they all
+                # appear to have a payment date.
+                {gsub("(\\d{4})\\d{2}", "", .)} %>% 
+                {gsub("(\\d{4})-\\d{2}", "", .)} 
+        
+        parsed_dates <- coalesce(
+                
+                clean_urls %>% 
+                        paste0("01" ) %>% 
+                        myd() 
+                
+                , 
+                
+                clean_urls %>% 
+                        dmy()
+        )
+        
+        
+        
+        parsed_dates[is.na(parsed_dates)]  <- dmy(clean_urls[is.na(parsed_dates)])
+        
+        parsed_dates
+        
+}
+
 
