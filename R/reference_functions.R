@@ -31,3 +31,23 @@ csr_ImpGenerateCreditorLookup <- function(){
                 , "Network Rail", "Network Rail Infrastructure Limited"
         )
 }
+
+
+
+# Looking up department names ---------------------------------------------
+
+csr_ImpGenerateDepartmentLookup <- function(){
+        tribble(
+                ~Dept, ~Department.Desc
+                , "ACAD", "Applied Care and Development"
+                , "CAHD", "Children Adults and Health Department"
+                , "CCHD", "Community Care and Housing Development"
+                , "CECR", "Chief Executive and Corporate Resources"
+                , "COMM", NA_character_
+                , "CORP", "Corporate and Central Services"
+                , "CYPN", NA_character_
+                , "DECS", "Department of Environment and Community Services"
+                , "ECS" , "Department of Environment and Community Services"
+                , "PTSE", "Planning, Transportation and Strategic Environment Committee"
+                )
+}
