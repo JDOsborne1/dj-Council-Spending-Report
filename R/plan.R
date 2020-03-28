@@ -33,9 +33,22 @@ data_load_plan <- drake_plan(
                 , transform = combine(Refined_Reader_Output)
         )
         
+
+# Unifying the creditor names ---------------------------------------------
+
+        , credit_matching_list = Output_total %>% 
+                pull(Creditor.name) %>% 
+                unique() 
+        
 )
 
 reporting_plan <- drake_plan(
+        
+        
+
+# Looking at the introductory data ----------------------------------------
+
+        
         date_level_spending_data = Output_total  %>% 
                 mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
                 arrange(Payment.date) %>% 
@@ -78,6 +91,31 @@ reporting_plan <- drake_plan(
                 geom_point() +
                 # scale_x_date(labels = date_formatter_base) +
                 theme_classic() 
+        
+
+# Who receives the most money ---------------------------------------------
+        , creditor_level_spending_data = Output_total  %>% 
+                csr_PurAggregateCreditors()
+
+        # Look into the names with the most money. Since they contain 40% of all payments
+        , large_creditor_names = creditor_level_spending_data %>% 
+                filter(rank <= 100) %>% 
+                pull(Creditor.name) 
+        , large_creditor_duplicate_lookup = match_list_generation(large_creditor_names, large_creditor_names)
+
+        
+        , creditor_name_lookup = csr_ImpGenerateCreditorLookup()
+                
+        , partially_rectified_creditor_level_spending_data = Output_total %>% 
+                csr_PurAggregateCreditors(reference_names = creditor_name_lookup)
+
+        , creditor_plot = partially_rectified_creditor_level_spending_data  %>% 
+                csr_PurPlotCreditors(limit = 20)
+                
+
+# Rendering Reports -------------------------------------------------------
+
+        
 
         , spending_report = render(knitr_in(!!here("reports/spending_report.Rmd")))
         , implementation_report = render(knitr_in(!!here("reports/implementation_gap.Rmd")))
