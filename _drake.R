@@ -8,9 +8,15 @@ library(tools)
 library(rmarkdown)
 library(here)
 library(forcats)
+library(tibble)
+library(tidyr)
 
 
 source(here("R/extract_functions.R"))
+source(here("R/aggregation_functions.R"))
+source(here("R/plotting_functions.R"))
+source(here("R/reference_functions.R"))
+source(here("R/fuzzy_matching_functions.R"))
 
 
 link_list <- readd(refined_links)$link

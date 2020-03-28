@@ -33,6 +33,13 @@ data_load_plan <- drake_plan(
                 , transform = combine(Refined_Reader_Output)
         )
         
+
+# Unifying the creditor names ---------------------------------------------
+
+        , credit_matching_list = Output_total %>% 
+                pull(Creditor.name) %>% 
+                unique() 
+        
 )
 
 reporting_plan <- drake_plan(
@@ -88,26 +95,22 @@ reporting_plan <- drake_plan(
 
 # Who receives the most money ---------------------------------------------
         , creditor_level_spending_data = Output_total  %>% 
-                mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
-                group_by(Creditor.name) %>% 
-                summarise(
-                        Number.of.payments = n()
-                        , Total.payment = sum(Amount.Paid)
-                        , Average.Payment = Total.payment/Number.of.payments
-                        ) %>% 
-                arrange(desc(Total.payment)) %>% 
-                mutate(rank = row_number())
-                                
+                csr_PurAggregateCreditors()
+
+        # Look into the names with the most money. Since they contain 40% of all payments
+        , large_creditor_names = creditor_level_spending_data %>% 
+                filter(rank <= 100) %>% 
+                pull(Creditor.name) 
+        , large_creditor_duplicate_lookup = match_list_generation(large_creditor_names, large_creditor_names)
+
+        
+        , creditor_name_lookup = csr_ImpGenerateCreditorLookup()
                 
-        , creditor_plot = creditor_level_spending_data  %>% 
-                filter(rank <=20) %>% 
-                mutate_at(vars(Creditor.name), as_factor) %>% 
-                {
-                ggplot(., aes(x = Creditor.name, y = Total.payment)) +
-                geom_col() +
-                scale_x_discrete(limits = rev(levels(.$Creditor.name))) +
-                coord_flip()
-                }
+        , partially_rectified_creditor_level_spending_data = Output_total %>% 
+                csr_PurAggregateCreditors(reference_names = creditor_name_lookup)
+
+        , creditor_plot = partially_rectified_creditor_level_spending_data  %>% 
+                csr_PurPlotCreditors(limit = 20)
                 
 
 # Rendering Reports -------------------------------------------------------
