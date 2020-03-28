@@ -122,6 +122,9 @@ reporting_plan <- drake_plan(
                                          , "Eurotaxis Limited", "Eurotaxis Ltd" 
                                          , "Freeways Trust Limited", "Freeways Trust Ltd"
                                          , "Tarmac Trading Limited", "Lafarge Tarmac Trading Limited"
+                                         # The two below arent identified as the same company on companies house, but they have identical directors so lumping together
+                                         , "Tarmac Trading Limited", "Tarmac Aggregates Limited"
+                                         , "Tarmac Trading Limited", "Lafarge Aggregates Limited"
                                          , "Medequip Assistive Technology Limited", "Medequip Assistive Technology Ltd"
                                          # The below are actually different legal entities, but almost certainly fill the same role
                                          , "Network Rail", "Network Rail Infrastructure Limited"
