@@ -10,6 +10,7 @@ library(here)
 library(forcats)
 library(tibble)
 library(tidyr)
+library(stringr)
 
 
 source(here("R/extract_functions.R"))
