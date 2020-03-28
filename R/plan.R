@@ -34,8 +34,7 @@ data_load_plan <- drake_plan(
         )
         
         , Output_refined = Output_total %>% 
-                mutate(inferred.date = csr_PurDateParseFromFileName(Source.url)) %>% 
-                mutate(Payment.date.infill = coalesce(Payment.date, inferred.date))
+                csr_PurRefineOutputData()
 
 # Unifying the creditor names ---------------------------------------------
 
