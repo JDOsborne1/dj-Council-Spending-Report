@@ -7,6 +7,7 @@
 #'   sense to calculate once that data is all put together. This function
 #'   handles the following:
 #'     - Infilling missing payment dates from file names
+#'     - Fixing the incorrect years of some of the date (3 rows at last check)
 #'
 #' @param input_ds
 #'
