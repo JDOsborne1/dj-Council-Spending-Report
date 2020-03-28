@@ -36,6 +36,23 @@ csr_ImpGenerateCreditorLookup <- function(){
 
 # Looking up department names ---------------------------------------------
 
+#' Generate the Departmental Lookup
+#'
+#' @description The spending is attributed to departments in the spending
+#'   reports through use of Department codes. These codes are not made available
+#'   in one place, however most of them can be indferred through the use of a
+#'   variety of public documents.
+#'
+#' @source This data comes from multiple sources. They are listed below: 
+#'   - https://www.appliedcare.co.uk/education.aspx 
+#'   - https://www.southglos.gov.uk/council-and-democracy/organisational-structure/
+#'   - https://www.southglos.gov.uk/documents/Audited-Annual-Financial-Report-201819.pdf
+#'   - https://www.bsgconservatives.com/people/cllr-brian-allinson
+#'
+#' @return
+#' @export
+#'
+#' @examples
 csr_ImpGenerateDepartmentLookup <- function(){
         tribble(
                 ~Dept, ~Department.Desc
