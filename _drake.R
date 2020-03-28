@@ -10,11 +10,13 @@ library(here)
 library(forcats)
 library(tibble)
 library(tidyr)
+library(stringr)
 
 
 source(here("R/extract_functions.R"))
 source(here("R/aggregation_functions.R"))
 source(here("R/plotting_functions.R"))
+source(here("R/refinement_functions.R"))
 source(here("R/reference_functions.R"))
 source(here("R/fuzzy_matching_functions.R"))
 

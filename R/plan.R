@@ -33,6 +33,8 @@ data_load_plan <- drake_plan(
                 , transform = combine(Refined_Reader_Output)
         )
         
+        , Output_refined = Output_total %>% 
+                csr_PurRefineOutputData()
 
 # Unifying the creditor names ---------------------------------------------
 
