@@ -95,15 +95,7 @@ reporting_plan <- drake_plan(
 
 # Who receives the most money ---------------------------------------------
         , creditor_level_spending_data = Output_total  %>% 
-                mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
-                group_by(Creditor.name) %>% 
-                summarise(
-                        Number.of.payments = n()
-                        , Total.payment = sum(Amount.Paid)
-                        , Average.Payment = Total.payment/Number.of.payments
-                        ) %>% 
-                arrange(desc(Total.payment)) %>% 
-                mutate(rank = row_number())
+                csr_PurAggregateCreditors()
 
         # Look into the names with the most money. Since they contain 40% of all payments
         , large_creditor_names = creditor_level_spending_data %>% 
@@ -130,27 +122,11 @@ reporting_plan <- drake_plan(
                                          , "Network Rail", "Network Rail Infrastructure Limited"
                                          )
                 
-        , partially_rectified_creditor_level_spending_data = creditor_level_spending_data %>% 
-                left_join(creditor_name_lookup, by = c("Creditor.name" = "secondary.name")) %>% 
-                mutate(standard.name = coalesce(standard.name, Creditor.name)) %>% 
-                group_by(standard.name) %>% 
-                summarise(
-                        Number.of.payments = sum(Number.of.payments)
-                        , Total.payment = sum(Total.payment)
-                        , Average.Payment = Total.payment/Number.of.payments
-                ) %>% 
-                arrange(desc(Total.payment)) %>% 
-                mutate(rank = row_number())
+        , partially_rectified_creditor_level_spending_data = Output_total %>% 
+                csr_PurAggregateCreditors(reference_names = creditor_name_lookup)
 
         , creditor_plot = partially_rectified_creditor_level_spending_data  %>% 
-                filter(rank <=20) %>% 
-                mutate_at(vars(standard.name), as_factor) %>% 
-                {
-                ggplot(., aes(x = standard.name, y = Total.payment)) +
-                geom_col() +
-                scale_x_discrete(limits = rev(levels(.$standard.name))) +
-                coord_flip()
-                }
+                csr_PurPlotCreditors(limit = 20)
                 
 
 # Rendering Reports -------------------------------------------------------
