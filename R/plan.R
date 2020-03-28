@@ -33,6 +33,13 @@ data_load_plan <- drake_plan(
                 , transform = combine(Refined_Reader_Output)
         )
         
+
+# Unifying the creditor names ---------------------------------------------
+
+        , credit_matching_list = Output_total %>% 
+                pull(Creditor.name) %>% 
+                unique() 
+        
 )
 
 reporting_plan <- drake_plan(

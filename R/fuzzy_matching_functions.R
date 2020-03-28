@@ -70,8 +70,20 @@ B <- c(
 # The scores matrix contains all the pairwise scores. Then it would be a simple matter to pick the best match for each
 # with details depending on whether there can be multiple matches, whether everything must match, etc.
 
-wf <- fuzzy_gen_word_freq(c(A, B))
+
+match_list_generation <- function(vect_x, vect_y){
+wf <- fuzzy_gen_word_freq(c(vect_x, vect_y))
 vectorised_match <- function (L1,L2) { mapply(function(a,b) { fuzzy_title_match(a, b, wf) }, L1, L2) } 
-scores <- outer(A, B, vectorised_match)
-rownames(scores) <- A
-colnames(scores) <- B
+        scores <- outer(vect_x, vect_y, vectorised_match)
+        rownames(scores) <- vect_x
+        colnames(scores) <- vect_y
+        as.data.frame(scores) %>% 
+                rownames_to_column() %>% 
+                as_tibble() %>% 
+                pivot_longer(cols = -rowname, names_to = "colname") %>% 
+                arrange(rowname, desc(value))
+        }
+
+
+match_list_generation(A, B)
+
