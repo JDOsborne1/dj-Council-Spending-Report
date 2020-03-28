@@ -72,8 +72,10 @@ B <- c(
 
 
 match_list_generation <- function(vect_x, vect_y){
-wf <- fuzzy_gen_word_freq(c(vect_x, vect_y))
-vectorised_match <- function (L1,L2) { mapply(function(a,b) { fuzzy_title_match(a, b, wf) }, L1, L2) } 
+        wf <- fuzzy_gen_word_freq(c(vect_x, vect_y))
+        
+        vectorised_match <- function (L1,L2) { mapply(function(a,b) { fuzzy_title_match(a, b, wf) }, L1, L2) } 
+        
         scores <- outer(vect_x, vect_y, vectorised_match)
         rownames(scores) <- vect_x
         colnames(scores) <- vect_y

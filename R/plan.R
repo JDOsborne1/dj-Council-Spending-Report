@@ -104,6 +104,9 @@ reporting_plan <- drake_plan(
                         ) %>% 
                 arrange(desc(Total.payment)) %>% 
                 mutate(rank = row_number())
+
+        # Look into the names with the most money. Since they contain 40% of all payments
+        , large_creditor_names = creditor_level_spending_data %>% filter(rank <= 100) %>% pull(Creditor.name) 
                                 
                 
         , creditor_plot = creditor_level_spending_data  %>% 
