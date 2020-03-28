@@ -14,7 +14,7 @@ csr_PurAggregateCreditors <- function(input_ds, reference_names = NULL){
         
         if(!is.null(reference_names)){
                output <- output %>% 
-                       left_join(creditor_name_lookup, by = c("Creditor.name" = "secondary.name")) %>% 
+                       left_join(reference_names, by = c("Creditor.name" = "secondary.name")) %>% 
                        mutate(standard.name = coalesce(standard.name, Creditor.name)) %>% 
                        group_by(standard.name) %>% 
                        summarise(
