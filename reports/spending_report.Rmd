@@ -29,13 +29,18 @@ This report leverages R to scrape the above webpage for the data links and bring
 
 One comment to be made is that while there seems to be a standard across open data providers to make the data available in monthly or quarterly chunks, those chunks are themselves rarely uniform. In the case of this data, there appears to be a minimal or inconsistent standard in naming files. In addition, the column names change between data which is ostensibly recording the same information. In some cases, there are files which have been saved as .xlsx format and which have additional empty sheets which serve no purpose. These files have then simply been renamed to .csv format. 
 
-There are cases where the csv files have additional columns made up of blank entries. This tricks the reader in to looking for data in those columns, and when the extra blank rows disappear it causes parsing errors. In certain files there is also breaks between each of the Department records to include what is most likely a summary value. 
+There are cases where the csv files have additional columns made up of blank entries. This tricks the reader in to looking for data in those columns, and when the extra blank rows disappear it causes parsing errors. In certain files there is also breaks between each of the Department records to include what is most likely a summary value.
+
+
+
 
 ```{r experimenting with the plot}
 
 
 readd(date_level_spending_plot)
 ```
+
+As part of the process for generating this plot, we needed to handle some improper dates. In a few cases the dates were recorded with years which could not be possible, generally either 1900 or 2892. Either a file formatting or a human error, these dates were readjusted using the filenames to be for the correct year. 
 
 ```{r Looking at spend by department}
 
