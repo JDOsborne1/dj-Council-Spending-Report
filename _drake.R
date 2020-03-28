@@ -7,6 +7,7 @@ library(ggplot2)
 library(tools)
 library(rmarkdown)
 library(here)
+library(forcats)
 
 
 source(here("R/extract_functions.R"))
