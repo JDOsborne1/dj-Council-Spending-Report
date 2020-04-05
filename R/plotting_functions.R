@@ -9,7 +9,13 @@ csr_PurPlotCreditors <- function(agg_ds, limit = 20){
                                 geom_col() +
                                 scale_x_discrete(limits = rev(levels(.$standard.name))) +
                                 coord_flip()
-                }
+                } +
+                scale_fill_wsj() +
+                scale_y_continuous(
+                        labels = function(x) scales::number(x, prefix = `Encoding<-`("£", "UTF-") , big.mark = ",")
+                        , expand = c(0,0,0.1, 0)
+                ) +
+                theme_wsj()
         }
 
 

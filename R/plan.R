@@ -90,13 +90,7 @@ reporting_plan <- drake_plan(
                 csr_PurAggregateCreditors(reference_names = creditor_name_lookup)
 
         , creditor_plot = partially_rectified_creditor_level_spending_data  %>% 
-                csr_PurPlotCreditors(limit = 20) +
-                scale_fill_wsj() +
-                scale_y_continuous(
-                        labels = function(x) scales::number(x, prefix = `Encoding<-`("£", "UTF-8") , big.mark = ",")
-                        , expand = c(0,0,0.1, 0)
-                        ) +
-                theme_wsj()
+                csr_PurPlotCreditors(limit = 20)
                 
 
 # Rendering Reports -------------------------------------------------------
