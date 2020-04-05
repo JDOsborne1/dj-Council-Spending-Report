@@ -15,7 +15,13 @@ csr_PurPlotCreditors <- function(agg_ds, limit = 20){
                         labels = function(x) scales::number(x, prefix = `Encoding<-`("£", "UTF-") , big.mark = ",")
                         , expand = c(0,0,0.1, 0)
                 ) +
-                theme_wsj()
+                theme_wsj() +
+                labs(
+                        title = "Which Creditors Receive the Most?"
+                        , subtitle = "The total amount paid to the top 20 payees"
+                        , caption = "Data from 2010-04-01 to 2020-03-01"
+                )
+        
         }
 
 
@@ -57,5 +63,10 @@ ggplot(aes(x = year, y = total.spend, colour = Department.Desc)) +
                 labels = function(x) scales::number(x, prefix = `Encoding<-`("£", "UTF-8"), big.mark = ",")
         ) +
         # scale_color_wsj() +
-        theme_wsj() 
+        theme_wsj()  +
+        labs(
+                title = "How much is spent by each department?"
+                , subtitle = "And how does this change over time"
+                , caption = "Decoded departments, various sources"
+        )
 }
