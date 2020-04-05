@@ -46,6 +46,11 @@ As part of the process for generating this plot, we needed to handle some improp
 readd(dept_level_spending_plot)
 ```
 
+When looking into the spending by department, it is clearly a story of reorganisation. In 2015 and 2013 there are breaks in the departments, the inference being that departments are reorganised, with their responsibilities and therefor spending, changing at each time. In some cases this is a dramatic shift, and there are some clear stories to look into. 
+
+1. The formation of the Children Adults and Health department, followed by 1 year later it being the largest department by spending. This could be indicative of a centralisation of responsibilities from lower levels of government or smaller departments, it could also represent a decentralisation of responsibility from higher levels of government. 
+1. The sharp doubling of the yearly spending of the corporate and central services  
+1. The abrupt peak in spending on Environment and Community services
 
 ## Which Creditors recieve the most money 
 
