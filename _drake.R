@@ -11,7 +11,7 @@ library(forcats)
 library(tibble)
 library(tidyr)
 library(stringr)
-
+library(ggthemes)
 
 source(here("R/extract_functions.R"))
 source(here("R/aggregation_functions.R"))
