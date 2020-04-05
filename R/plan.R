@@ -74,7 +74,7 @@ reporting_plan <- drake_plan(
                 csr_PurPlotDepartmentSpend()
 
 # Who receives the most money ---------------------------------------------
-        , creditor_level_spending_data = Output_total  %>% 
+        , creditor_level_spending_data = Output_refined  %>% 
                 csr_PurAggregateCreditors()
 
         # Look into the names with the most money. Since they contain 40% of all payments
@@ -86,7 +86,7 @@ reporting_plan <- drake_plan(
         
         , creditor_name_lookup = csr_ImpGenerateCreditorLookup()
                 
-        , partially_rectified_creditor_level_spending_data = Output_total %>% 
+        , partially_rectified_creditor_level_spending_data = Output_refined %>% 
                 csr_PurAggregateCreditors(reference_names = creditor_name_lookup)
 
         , creditor_plot = partially_rectified_creditor_level_spending_data  %>% 
