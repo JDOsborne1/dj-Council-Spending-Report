@@ -17,9 +17,9 @@ csr_PurPlotCreditors <- function(agg_ds, limit = 20){
                 ) +
                 theme_wsj() +
                 theme(
-                        plot.title = element_text(size = rel(0.8))
+                        plot.title = element_text(size = rel(0.85))
                         , plot.title.position = "plot"
-                        , plot.subtitle = element_text(size = rel(0.8), hjust = 0)
+                        , plot.subtitle = element_text(size = rel(0.65), hjust = 0)
                 ) +
                 labs(
                         title = "Which Creditors Receive the Most?"
@@ -43,7 +43,7 @@ csr_PurPlotCumulativeSpend <- function(input_ds){
                 scale_colour_wsj() +
                 theme_wsj() +
                 theme(
-                      plot.subtitle = element_text(size = rel(0.8))
+                      plot.subtitle = element_text(size = rel(0.65))
                         , plot.title.position = "plot"
                 ) +
                 labs(
@@ -71,7 +71,7 @@ ggplot(aes(x = year, y = total.spend, colour = Department.Desc)) +
         # scale_color_wsj() +
         theme_wsj()  +
                 theme(
-                        plot.subtitle = element_text(size = rel(0.8))
+                        plot.subtitle = element_text(size = rel(0.65))
                         , plot.title.position = "plot"
                 ) +
         labs(
