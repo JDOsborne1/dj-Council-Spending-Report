@@ -11,7 +11,7 @@ library(forcats)
 library(tibble)
 library(tidyr)
 library(stringr)
-
+library(ggthemes)
 
 source(here("R/extract_functions.R"))
 source(here("R/aggregation_functions.R"))
@@ -19,6 +19,7 @@ source(here("R/plotting_functions.R"))
 source(here("R/refinement_functions.R"))
 source(here("R/reference_functions.R"))
 source(here("R/fuzzy_matching_functions.R"))
+source(here("R/utility_functions.R"))
 
 
 link_list <- readd(refined_links)$link

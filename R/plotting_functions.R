@@ -9,5 +9,74 @@ csr_PurPlotCreditors <- function(agg_ds, limit = 20){
                                 geom_col() +
                                 scale_x_discrete(limits = rev(levels(.$standard.name))) +
                                 coord_flip()
-                }
+                } +
+                scale_fill_wsj() +
+                scale_y_continuous(
+                        labels = function(x) scales::number(x, prefix = `Encoding<-`("£", "UTF-") , big.mark = ",")
+                        , expand = c(0,0,0.1, 0)
+                ) +
+                theme_wsj() +
+                theme(
+                        plot.title = element_text(size = rel(0.85))
+                        , plot.title.position = "plot"
+                        , plot.subtitle = element_text(size = rel(0.65), hjust = 0)
+                ) +
+                labs(
+                        title = "Which Creditors Receive the Most?"
+                        , subtitle = csr_UtilTitleWrapper("The total amount paid to the top 20 payees", width = 50)
+                        , caption = "Data from 2010-04-01 to 2020-03-01"
+                )
+        
         }
+
+
+# Plotting cumulative spend -----------------------------------------------
+
+csr_PurPlotCumulativeSpend <- function(input_ds){
+        input_ds %>% 
+                ggplot(aes(x = Payment.date, y = Total.Spend.so.far)) +
+                geom_line(colour = '#CC2D2D',size = 2,linetype = 1,alpha = 0.67) + 
+                scale_y_continuous(
+                        labels = function(x) scales::dollar(x, prefix = `Encoding<-`("£", "UTF-8"))
+                        , expand = c(0, 0, 0.1, 0)
+                        )+
+                scale_colour_wsj() +
+                theme_wsj() +
+                theme(
+                      plot.subtitle = element_text(size = rel(0.65))
+                        , plot.title.position = "plot"
+                ) +
+                labs(
+                        title = "Total Daily Spend"
+                        , x = "Payment Day"
+                        , y = "Total Spend"
+                        , subtitle = csr_UtilTitleWrapper("The total council spend across all recipient categories", width = 50)
+                        , caption = "Source: South Gloucestershire Council"
+                )
+}
+
+
+
+# Plotting Departmental spend ---------------------------------------------
+
+csr_PurPlotDepartmentSpend <- function(input_ds){
+        input_ds %>% 
+ggplot(aes(x = year, y = total.spend, colour = Department.Desc)) +
+        geom_line(aes(group = Department.Desc)) +
+        geom_point() +
+        # scale_x_date(labels = date_formatter_base) +
+        scale_y_continuous(
+                labels = function(x) scales::number(x, prefix = `Encoding<-`("£", "UTF-8"), big.mark = ",")
+        ) +
+        # scale_color_wsj() +
+        theme_wsj()  +
+                theme(
+                        plot.subtitle = element_text(size = rel(0.65))
+                        , plot.title.position = "plot"
+                ) +
+        labs(
+                title = "Department Spending"
+                , subtitle = csr_UtilTitleWrapper("How much is spent by each department and how does this change over time?" , width = 50)
+                , caption = "Decoded departments, various sources"
+        )
+}

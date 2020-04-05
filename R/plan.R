@@ -51,15 +51,15 @@ reporting_plan <- drake_plan(
 # Looking at the introductory data ----------------------------------------
 
         
-        date_level_spending_data = Output_total  %>% 
+        date_level_spending_data = Output_refined  %>% 
+                # Removing one record where there is a genuine null value in the source data
+                filter(!(Ref.no == "3532" & Payment.date == "2012-03-27")) %>% 
                 mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
                 arrange(Payment.date) %>% 
                 mutate(Total.Spend.so.far = cumsum(Amount.Paid)) 
         
-        , dept_level_spending_data = Output_total  %>% 
+        , dept_level_spending_data = Output_refined  %>% 
                 mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
-                filter(Payment.date > "2010-01-01") %>% 
-                filter(Payment.date < "2021-01-01") %>% 
                 left_join(csr_ImpGenerateDepartmentLookup(), by = "Dept") %>% 
                 mutate_at(vars(Department.Desc), replace_na, "Unknown") %>% 
                 group_by(Department.Desc, year = lubridate::floor_date(Payment.date, unit = "years")) %>% 
@@ -68,37 +68,13 @@ reporting_plan <- drake_plan(
         
         
         , date_level_spending_plot = date_level_spending_data %>% 
-                filter(Payment.date > "2010-01-01") %>% 
-                filter(Payment.date < "2021-01-01") %>% 
-                ggplot(aes(x = Payment.date, y = Total.Spend.so.far)) +
-                geom_line(colour = '#CC2D2D',size = 2,linetype = 1,alpha = 0.67) + 
-                scale_y_continuous(labels = function(x) scales::dollar(x, prefix = "£"))+
-                theme_classic() +
-                theme(
-                        plot.subtitle = element_text(size = 13, hjust = 0.01, vjust = 1)
-                        , plot.caption = element_text(vjust = 1)#
-                        , axis.ticks = element_line(colour = "black")
-                        , axis.title = element_text(face = "bold")
-                        , axis.text = element_text(face = "bold")
-                        , plot.title = element_text(face = "bold")
-                ) + 
-                labs(
-                        title = "Total Daily Spend"
-                        , x = "Payment Day"
-                        , y = "Total Spend"
-                        , subtitle = "The total council spend across all recipient categories"
-                        , caption = "Source: South Gloucestershire Council"
-                )
+                csr_PurPlotCumulativeSpend()
         
         , dept_level_spending_plot = dept_level_spending_data  %>% 
-                ggplot(aes(x = year, y = total.spend, colour = Department.Desc)) +
-                geom_line(aes(group = Department.Desc)) +
-                geom_point() +
-                # scale_x_date(labels = date_formatter_base) +
-                theme_classic() 
+                csr_PurPlotDepartmentSpend()
 
 # Who receives the most money ---------------------------------------------
-        , creditor_level_spending_data = Output_total  %>% 
+        , creditor_level_spending_data = Output_refined  %>% 
                 csr_PurAggregateCreditors()
 
         # Look into the names with the most money. Since they contain 40% of all payments
@@ -110,7 +86,7 @@ reporting_plan <- drake_plan(
         
         , creditor_name_lookup = csr_ImpGenerateCreditorLookup()
                 
-        , partially_rectified_creditor_level_spending_data = Output_total %>% 
+        , partially_rectified_creditor_level_spending_data = Output_refined %>% 
                 csr_PurAggregateCreditors(reference_names = creditor_name_lookup)
 
         , creditor_plot = partially_rectified_creditor_level_spending_data  %>% 
