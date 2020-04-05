@@ -51,15 +51,15 @@ reporting_plan <- drake_plan(
 # Looking at the introductory data ----------------------------------------
 
         
-        date_level_spending_data = Output_total  %>% 
+        date_level_spending_data = Output_refined  %>% 
+                # Removing one record where there is a genuine null value in the source data
+                filter(!(Ref.no == "3532" & Payment.date == "2012-03-27")) %>% 
                 mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
                 arrange(Payment.date) %>% 
                 mutate(Total.Spend.so.far = cumsum(Amount.Paid)) 
         
-        , dept_level_spending_data = Output_total  %>% 
+        , dept_level_spending_data = Output_refined  %>% 
                 mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
-                filter(Payment.date > "2010-01-01") %>% 
-                filter(Payment.date < "2021-01-01") %>% 
                 left_join(csr_ImpGenerateDepartmentLookup(), by = "Dept") %>% 
                 mutate_at(vars(Department.Desc), replace_na, "Unknown") %>% 
                 group_by(Department.Desc, year = lubridate::floor_date(Payment.date, unit = "years")) %>% 
@@ -68,8 +68,6 @@ reporting_plan <- drake_plan(
         
         
         , date_level_spending_plot = date_level_spending_data %>% 
-                filter(Payment.date > "2010-01-01") %>% 
-                filter(Payment.date < "2021-01-01") %>% 
                 ggplot(aes(x = Payment.date, y = Total.Spend.so.far)) +
                 geom_line(colour = '#CC2D2D',size = 2,linetype = 1,alpha = 0.67) + 
                 scale_y_continuous(labels = function(x) scales::dollar(x, prefix = "£"))+
