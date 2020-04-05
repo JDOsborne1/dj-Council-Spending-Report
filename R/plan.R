@@ -68,37 +68,10 @@ reporting_plan <- drake_plan(
         
         
         , date_level_spending_plot = date_level_spending_data %>% 
-                ggplot(aes(x = Payment.date, y = Total.Spend.so.far)) +
-                geom_line(colour = '#CC2D2D',size = 2,linetype = 1,alpha = 0.67) + 
-                scale_y_continuous(labels = function(x) scales::dollar(x, prefix = "£"))+
-                theme_classic() +
-                theme(
-                        plot.subtitle = element_text(size = 13, hjust = 0.01, vjust = 1)
-                        , plot.caption = element_text(vjust = 1)#
-                        , axis.ticks = element_line(colour = "black")
-                        , axis.title = element_text(face = "bold")
-                        , axis.text = element_text(face = "bold")
-                        , plot.title = element_text(face = "bold")
-                ) + 
-                labs(
-                        title = "Total Daily Spend"
-                        , x = "Payment Day"
-                        , y = "Total Spend"
-                        , subtitle = "The total council spend across all recipient categories"
-                        , caption = "Source: South Gloucestershire Council"
-                )
+                csr_PurPlotCumulativeSpend()
         
         , dept_level_spending_plot = dept_level_spending_data  %>% 
-                ggplot(aes(x = year, y = total.spend, colour = Department.Desc)) +
-                geom_line(aes(group = Department.Desc)) +
-                geom_point() +
-                # scale_x_date(labels = date_formatter_base) +
-                scale_y_continuous(
-                        labels = function(x) scales::number(x, prefix = "£", big.mark = ",")
-                        ) +
-                # scale_color_wsj() +
-                theme_wsj() 
-                
+                csr_PurPlotDepartmentSpend()
 
 # Who receives the most money ---------------------------------------------
         , creditor_level_spending_data = Output_total  %>% 
