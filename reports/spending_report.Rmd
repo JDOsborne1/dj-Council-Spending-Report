@@ -43,12 +43,16 @@ readd(date_level_spending_plot)
 As part of the process for generating this plot, we needed to handle some improper dates. In a few cases the dates were recorded with years which could not be possible, generally either 1900 or 2892. Either a file formatting or a human error, these dates were readjusted using the filenames to be for the correct year. 
 
 ```{r Looking at spend by department}
-
-
-
 readd(dept_level_spending_plot)
-
 ```
+
+When looking into the spending by department, it is clearly a story of reorganisation. In 2015 and 2013 there are breaks in the departments, the inference being that departments are reorganised, with their responsibilities and therefor spending, changing at each time. In some cases this is a dramatic shift, and there are some clear stories to look into. 
+
+1. The formation of the Children Adults and Health department, followed by 1 year later it being the largest department by spending. This could be indicative of a centralisation of responsibilities from lower levels of government or smaller departments, it could also represent a decentralisation of responsibility from higher levels of government. 
+1. The sharp doubling of the yearly spending of the corporate and central services  
+1. The abrupt peak in spending on Environment and Community services
+
+Due to the somewhat confusing nature of the spending structure with respect to the department, it may be necessary to split this section into multiple ones, with more incisive charts. This could also be rectified with greater contextual information from the council itself. One way to obtain this will be to look a the council minutes across the periods of greatest change. 
 
 ## Which Creditors recieve the most money 
 

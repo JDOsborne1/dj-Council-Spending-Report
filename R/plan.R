@@ -60,8 +60,11 @@ reporting_plan <- drake_plan(
                 mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
                 filter(Payment.date > "2010-01-01") %>% 
                 filter(Payment.date < "2021-01-01") %>% 
-                group_by(Dept, year = lubridate::floor_date(Payment.date, unit = "years")) %>% 
-                summarise(total.spend = sum(Amount.Paid, na.rm = T))
+                left_join(csr_ImpGenerateDepartmentLookup(), by = "Dept") %>% 
+                mutate_at(vars(Department.Desc), replace_na, "Unknown") %>% 
+                group_by(Department.Desc, year = lubridate::floor_date(Payment.date, unit = "years")) %>% 
+                summarise(total.spend = sum(Amount.Paid, na.rm = T)) %>% 
+                ungroup()
         
         
         , date_level_spending_plot = date_level_spending_data %>% 
@@ -87,13 +90,12 @@ reporting_plan <- drake_plan(
                         , caption = "Source: South Gloucestershire Council"
                 )
         
-        , dept_level_spending_plot = dept_level_spending_data %>% 
-                ggplot(aes(x = year, y = total.spend, colour = Dept)) +
-                geom_line(aes(group = Dept)) +
+        , dept_level_spending_plot = dept_level_spending_data  %>% 
+                ggplot(aes(x = year, y = total.spend, colour = Department.Desc)) +
+                geom_line(aes(group = Department.Desc)) +
                 geom_point() +
                 # scale_x_date(labels = date_formatter_base) +
                 theme_classic() 
-        
 
 # Who receives the most money ---------------------------------------------
         , creditor_level_spending_data = Output_total  %>% 
