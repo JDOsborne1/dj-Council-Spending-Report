@@ -16,9 +16,14 @@ csr_PurPlotCreditors <- function(agg_ds, limit = 20){
                         , expand = c(0,0,0.1, 0)
                 ) +
                 theme_wsj() +
+                theme(
+                        plot.title = element_text(size = rel(0.8))
+                        , plot.title.position = "plot"
+                        , plot.subtitle = element_text(size = rel(0.8), hjust = 0)
+                ) +
                 labs(
                         title = "Which Creditors Receive the Most?"
-                        , subtitle = "The total amount paid to the top 20 payees"
+                        , subtitle = csr_UtilTitleWrapper("The total amount paid to the top 20 payees", width = 50)
                         , caption = "Data from 2010-04-01 to 2020-03-01"
                 )
         
@@ -39,12 +44,13 @@ csr_PurPlotCumulativeSpend <- function(input_ds){
                 theme_wsj() +
                 theme(
                       plot.subtitle = element_text(size = rel(0.8))
+                        , plot.title.position = "plot"
                 ) +
                 labs(
                         title = "Total Daily Spend"
                         , x = "Payment Day"
                         , y = "Total Spend"
-                        , subtitle = csr_UtilTitleWrapper("The total council spend across all recipient categories", width = 40)
+                        , subtitle = csr_UtilTitleWrapper("The total council spend across all recipient categories", width = 50)
                         , caption = "Source: South Gloucestershire Council"
                 )
 }
@@ -64,9 +70,13 @@ ggplot(aes(x = year, y = total.spend, colour = Department.Desc)) +
         ) +
         # scale_color_wsj() +
         theme_wsj()  +
+                theme(
+                        plot.subtitle = element_text(size = rel(0.8))
+                        , plot.title.position = "plot"
+                ) +
         labs(
-                title = "How much is spent by each department?"
-                , subtitle = "And how does this change over time"
+                title = "Department Spending"
+                , subtitle = csr_UtilTitleWrapper("How much is spent by each department and how does this change over time?" , width = 50)
                 , caption = "Decoded departments, various sources"
         )
 }
