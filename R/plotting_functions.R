@@ -20,7 +20,7 @@ csr_PurPlotCumulativeSpend <- function(input_ds){
                 ggplot(aes(x = Payment.date, y = Total.Spend.so.far)) +
                 geom_line(colour = '#CC2D2D',size = 2,linetype = 1,alpha = 0.67) + 
                 scale_y_continuous(
-                        labels = function(x) scales::dollar(x, prefix = "£")
+                        labels = function(x) scales::dollar(x, prefix = `Encoding<-`("£", "UTF-8"))
                         , expand = c(0, 0, 0.1, 0)
                         )+
                 scale_colour_wsj() +
@@ -46,7 +46,7 @@ ggplot(aes(x = year, y = total.spend, colour = Department.Desc)) +
         geom_point() +
         # scale_x_date(labels = date_formatter_base) +
         scale_y_continuous(
-                labels = function(x) scales::number(x, prefix = "£", big.mark = ",")
+                labels = function(x) scales::number(x, prefix = `Encoding<-`("£", "UTF-8"), big.mark = ",")
         ) +
         # scale_color_wsj() +
         theme_wsj() 
