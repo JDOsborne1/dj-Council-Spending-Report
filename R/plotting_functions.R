@@ -20,15 +20,9 @@ csr_PurPlotCumulativeSpend <- function(input_ds){
                 ggplot(aes(x = Payment.date, y = Total.Spend.so.far)) +
                 geom_line(colour = '#CC2D2D',size = 2,linetype = 1,alpha = 0.67) + 
                 scale_y_continuous(labels = function(x) scales::dollar(x, prefix = "£"))+
-                theme_classic() +
-                theme(
-                        plot.subtitle = element_text(size = 13, hjust = 0.01, vjust = 1)
-                        , plot.caption = element_text(vjust = 1)#
-                        , axis.ticks = element_line(colour = "black")
-                        , axis.title = element_text(face = "bold")
-                        , axis.text = element_text(face = "bold")
-                        , plot.title = element_text(face = "bold")
-                        ) + 
+                scale_colour_wsj() +
+                theme_wsj() +
+                
                 labs(
                         title = "Total Daily Spend"
                         , x = "Payment Day"
