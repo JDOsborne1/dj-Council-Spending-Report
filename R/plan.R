@@ -95,7 +95,12 @@ reporting_plan <- drake_plan(
                 geom_line(aes(group = Department.Desc)) +
                 geom_point() +
                 # scale_x_date(labels = date_formatter_base) +
-                theme_classic() 
+                scale_y_continuous(
+                        labels = function(x) scales::number(x, prefix = "£", big.mark = ",")
+                        ) +
+                # scale_color_wsj() +
+                theme_wsj() 
+                
 
 # Who receives the most money ---------------------------------------------
         , creditor_level_spending_data = Output_total  %>% 
