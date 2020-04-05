@@ -31,12 +31,14 @@ csr_PurPlotCumulativeSpend <- function(input_ds){
                         )+
                 scale_colour_wsj() +
                 theme_wsj() +
-                
+                theme(
+                      plot.subtitle = element_text(size = rel(0.8))
+                ) +
                 labs(
                         title = "Total Daily Spend"
                         , x = "Payment Day"
                         , y = "Total Spend"
-                        , subtitle = "The total council spend across all recipient categories"
+                        , subtitle = csr_UtilTitleWrapper("The total council spend across all recipient categories", width = 40)
                         , caption = "Source: South Gloucestershire Council"
                 )
 }
