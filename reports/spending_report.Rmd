@@ -43,12 +43,9 @@ readd(date_level_spending_plot)
 As part of the process for generating this plot, we needed to handle some improper dates. In a few cases the dates were recorded with years which could not be possible, generally either 1900 or 2892. Either a file formatting or a human error, these dates were readjusted using the filenames to be for the correct year. 
 
 ```{r Looking at spend by department}
-
-
-
 readd(dept_level_spending_plot)
-
 ```
+
 
 ## Which Creditors recieve the most money 
 
