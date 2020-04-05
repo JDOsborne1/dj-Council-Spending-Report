@@ -52,6 +52,8 @@ When looking into the spending by department, it is clearly a story of reorganis
 1. The sharp doubling of the yearly spending of the corporate and central services  
 1. The abrupt peak in spending on Environment and Community services
 
+Due to the somewhat confusing nature of the spending structure with respect to the department, it may be necessary to split this section into multiple ones, with more incisive charts. This could also be rectified with greater contextual information from the council itself. One way to obtain this will be to look a the council minutes across the periods of greatest change. 
+
 ## Which Creditors recieve the most money 
 
 Its first important to note that the creditors are not consitently referred to. Normally they are a company, however sometimes they refer to an address, or even an individual.
