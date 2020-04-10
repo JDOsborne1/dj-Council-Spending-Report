@@ -48,7 +48,9 @@ reporting_plan <- drake_plan(
         
         
 
-# Looking at the introductory data ----------------------------------------
+
+# Data Trends over time ---------------------------------------------------
+
 
         
         date_level_spending_data = Output_refined  %>% 
@@ -92,6 +94,11 @@ reporting_plan <- drake_plan(
         , creditor_plot = partially_rectified_creditor_level_spending_data  %>% 
                 csr_PurPlotCreditors(limit = 20)
                 
+
+
+# Voluntary Composition over time -----------------------------------------
+
+
 
 # Rendering Reports -------------------------------------------------------
 
