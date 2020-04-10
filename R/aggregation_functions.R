@@ -40,3 +40,26 @@ csr_PurAggregateVoluntaryGrants <- function(input_ds){
                 group_by(payment.month) %>% 
                 summarise(total.spend = sum(Amount.Paid))
         }
+
+
+
+# Department Level Aggregations -------------------------------------------
+
+csr_PurAggregateDepartments <- function(input_ds){
+        input_ds %>% 
+                left_join(csr_ImpGenerateDepartmentLookup(), by = "Dept") %>% 
+                mutate_at(vars(Department.Desc), replace_na, "Unknown") %>% 
+                group_by(Department.Desc, year = lubridate::floor_date(Payment.date, unit = "years")) %>% 
+                summarise(total.spend = sum(Amount.Paid, na.rm = T)) %>% 
+                ungroup()
+}
+
+# Date Level Aggregations -------------------------------------------------
+
+csr_PurAggregateCumulativeSpending <- function(input_ds){
+        input_ds %>% 
+                # Removing one record where there is a genuine null value in the source data
+                filter(!(Ref.no == "3532" & Payment.date == "2012-03-27")) %>% 
+                arrange(Payment.date) %>% 
+                mutate(Total.Spend.so.far = cumsum(Amount.Paid)) 
+}
