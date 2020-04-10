@@ -68,6 +68,17 @@ readd(creditor_plot)
 Unsurprisingly, the most fundamental features of local government feature heavily. Policing, Waste Disposal, Mass Transit and Fire Services. These are also the most centralised of the government services, this becomes apparent when you realise that the Social care company Milestones Trust is in the top 20 3 times. When you combine just those 3 then that Trust has received more than the Avon Fire authority. 
 
 
+## Spending on Voluntary Bodies
+
+There is a description field in the payments data. In some cases this field reads 'Grants to Voluntary Bodies' this can be for a variety of purposes, but my hypothesis was that as the composition of the council's responsibilities changed, they may be forced to rely on charities more. An alternative is that as their budget was put under more and more pressure, that the grants to voluntary bodies would be supressed. 
+
+```{r}
+readd(voluntary_plot)
+```
+
+It turns out that neither are the case. While the amount paid in any given month fluctuates wildly, the month on month trend is flat. This indicates that there is no, or minimal, consistent change in the amounts paid in grants to voluntary bodies. 
+
+
 ## Sources
 
 Below is a list of sources consulted in the generation of the report. Not all the sources contributed any unique content, but they have all been kept for their value to future investigations. 
