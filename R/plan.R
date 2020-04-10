@@ -96,7 +96,16 @@ reporting_plan <- drake_plan(
 
 # Voluntary Composition over time -----------------------------------------
 
+        , voluntary_data = Output_refined %>% 
+                filter(Description == "Grants to Voluntary Bodies") %>%
+        mutate(payment.month = lubridate::floor_date(Payment.date, unit = "month")) %>% 
+        group_by(payment.month) %>% 
+        summarise(total.spend = sum(Amount.Paid))
 
+        , voluntary_plot = voluntary_data %>% 
+        ggplot(aes(x = payment.month, y = total.spend)) +
+        geom_line(group = 1) +
+        geom_smooth(method = "glm")
 
 # Rendering Reports -------------------------------------------------------
 
