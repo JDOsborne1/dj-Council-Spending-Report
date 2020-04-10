@@ -17,6 +17,9 @@
 #' @examples
 csr_PurRefineOutputData <- function(input_ds){
         input_ds %>% 
+                # generating an amount paid metric
+                mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
+                
         mutate(inferred.date = csr_PurDateParseFromFileName(Source.url)) %>% 
                 # Infilling the missing dates
         mutate(Payment.date.infill = coalesce(Payment.date, inferred.date)) %>% 

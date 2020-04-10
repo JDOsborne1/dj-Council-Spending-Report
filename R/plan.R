@@ -56,12 +56,10 @@ reporting_plan <- drake_plan(
         date_level_spending_data = Output_refined  %>% 
                 # Removing one record where there is a genuine null value in the source data
                 filter(!(Ref.no == "3532" & Payment.date == "2012-03-27")) %>% 
-                mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
                 arrange(Payment.date) %>% 
                 mutate(Total.Spend.so.far = cumsum(Amount.Paid)) 
         
         , dept_level_spending_data = Output_refined  %>% 
-                mutate(Amount.Paid = coalesce(Net.amount, Gross.amount)) %>% 
                 left_join(csr_ImpGenerateDepartmentLookup(), by = "Dept") %>% 
                 mutate_at(vars(Department.Desc), replace_na, "Unknown") %>% 
                 group_by(Department.Desc, year = lubridate::floor_date(Payment.date, unit = "years")) %>% 
