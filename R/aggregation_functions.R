@@ -27,3 +27,16 @@ csr_PurAggregateCreditors <- function(input_ds, reference_names = NULL){
         }
         output
 }
+
+
+
+
+# Voluntary Grant Aggregations --------------------------------------------
+
+csr_PurAggregateVoluntaryGrants <- function(input_ds){
+        input_ds  %>% 
+                filter(Description == "Grants to Voluntary Bodies") %>%
+                mutate(payment.month = lubridate::floor_date(Payment.date, unit = "month")) %>% 
+                group_by(payment.month) %>% 
+                summarise(total.spend = sum(Amount.Paid))
+        }

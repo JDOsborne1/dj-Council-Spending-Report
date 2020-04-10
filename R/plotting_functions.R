@@ -80,3 +80,26 @@ ggplot(aes(x = year, y = total.spend, colour = Department.Desc)) +
                 , caption = "Decoded departments, various sources"
         )
 }
+
+
+# Plotting Voluntary Grants -----------------------------------------------
+
+csr_PutPlotVoluntaryGrantSpend <- function(input_ds){
+        input_ds %>% 
+                ggplot(aes(x = payment.month, y = total.spend)) +
+                geom_line(group = 1) +
+                geom_smooth(method = "glm") +
+                scale_y_continuous(
+                        labels = function(x) scales::dollar(x, prefix = `Encoding<-`("£", "UTF-8"))
+                )+
+                theme_wsj()+
+                theme(
+                        plot.subtitle = element_text(size = rel(0.65))
+                        , plot.title = element_text(size = rel(1))
+                        , plot.title.position = "plot"
+                ) +
+                labs(
+                        title = "Spending on 'Grants to Voluntary Bodies'"
+                        , subtitle = csr_UtilTitleWrapper("How much is spent on voluntary grants each month?" , width = 50)
+                )
+}

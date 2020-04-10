@@ -16,6 +16,7 @@ csr_ImpGenerateCreditorLookup <- function(){
         tribble(~standard.name, ~secondary.name
                 , "Aspects &  Milestones Trust", "Milestones Trust"
                 , "Aspects &  Milestones Trust", "Milestones - Unit 10"
+                , "Aspects &  Milestones Trust", "Milestones Outreach Dementia Services"
                 # Worth checking if there is a difference in the below.
                 , "Bath & North East Somerset Council", "Bath & North East Somerset Dist Council"
                 , "Brandon Trust", "The Brandon Trust"
