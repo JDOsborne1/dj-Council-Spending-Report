@@ -80,3 +80,13 @@ ggplot(aes(x = year, y = total.spend, colour = Department.Desc)) +
                 , caption = "Decoded departments, various sources"
         )
 }
+
+
+# Plotting Voluntary Grants -----------------------------------------------
+
+csr_PutPlotVoluntaryGrantSpend <- function(input_ds){
+        input_ds %>% 
+                ggplot(aes(x = payment.month, y = total.spend)) +
+                geom_line(group = 1) +
+                geom_smooth(method = "glm")
+}
