@@ -63,3 +63,11 @@ csr_PurAggregateCumulativeSpending <- function(input_ds){
                 arrange(Payment.date) %>% 
                 mutate(Total.Spend.so.far = cumsum(Amount.Paid)) 
 }
+
+
+
+# Payment Spread Tracking -------------------------------------------------
+
+csr_PurAggregatePaymentSpread <- function(input_ds){
+        NULL
+}
