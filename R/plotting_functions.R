@@ -112,6 +112,16 @@ csr_PurPlotSpread <- function(input_ds){
         input_ds %>% 
                 ggplot(aes(x = payment.month, y = mean.payment)) +
                 geom_point() +
-                geom_smooth(method = "lm", formula = y~x)
+                geom_smooth(method = "lm", formula = y~x) +
+                theme_wsj()+
+                theme(
+                        plot.subtitle = element_text(size = rel(0.65))
+                        , plot.title = element_text(size = rel(1))
+                        , plot.title.position = "plot"
+                ) +
+                labs(
+                        title = "Changes in the mean payment per month"
+                        , subtitle = csr_UtilTitleWrapper("Does the concentration of payments change over time?" , width = 50)
+                )
 }
 
