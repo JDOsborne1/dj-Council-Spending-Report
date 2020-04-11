@@ -64,7 +64,9 @@ csr_PurAggregateCumulativeSpending <- function(input_ds){
                 mutate(Total.Spend.so.far = cumsum(Amount.Paid)) 
 }
 
-
+csr_PurAggregateMonthlySpend <- function(input_ds){
+        NULL
+}
 
 # Payment Spread Tracking -------------------------------------------------
 

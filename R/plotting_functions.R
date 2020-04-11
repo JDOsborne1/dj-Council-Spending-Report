@@ -56,6 +56,11 @@ csr_PurPlotCumulativeSpend <- function(input_ds){
 }
 
 
+# Plotting Monthly Spend --------------------------------------------------
+
+csr_PurPlotMonthlySpend <- function(input_ds){
+        NULL
+}
 
 # Plotting Departmental spend ---------------------------------------------
 
