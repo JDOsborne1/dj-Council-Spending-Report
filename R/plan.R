@@ -56,12 +56,16 @@ reporting_plan <- drake_plan(
         date_level_spending_data = Output_refined  %>% 
                 csr_PurAggregateCumulativeSpending()
         
-        , dept_level_spending_data = Output_refined  %>% 
-                csr_PurAggregateDepartments()
-        
         
         , date_level_spending_plot = date_level_spending_data %>% 
                 csr_PurPlotCumulativeSpend()
+
+
+# Department Spending -----------------------------------------------------
+
+        
+        , dept_level_spending_data = Output_refined  %>% 
+                csr_PurAggregateDepartments()
         
         , dept_level_spending_plot = dept_level_spending_data  %>% 
                 csr_PurPlotDepartmentSpend()
