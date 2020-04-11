@@ -109,6 +109,9 @@ csr_PutPlotVoluntaryGrantSpend <- function(input_ds){
 # Plotting Spread of Spending ---------------------------------------------
 
 csr_PurPlotSpread <- function(input_ds){
-        NULL
+        input_ds %>% 
+                ggplot(aes(x = payment.month)) +
+                geom_col(aes(y = mean.payment)) +
+                geom_line(aes(y = num.payees), group = 1)
 }
 
