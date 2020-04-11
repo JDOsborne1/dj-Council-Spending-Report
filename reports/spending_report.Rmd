@@ -35,15 +35,10 @@ One comment to be made is that while there seems to be a standard across open da
 There are cases where the csv files have additional columns made up of blank entries. This tricks the reader in to looking for data in those columns, and when the extra blank rows disappear it causes parsing errors. In certain files there is also breaks between each of the Department records to include what is most likely a summary value.
 
 
+## Spending by Department
 
 
-```{r experimenting with the plot}
 
-
-readd(date_level_spending_plot)
-```
-
-As part of the process for generating this plot, we needed to handle some improper dates. In a few cases the dates were recorded with years which could not be possible, generally either 1900 or 2892. Either a file formatting or a human error, these dates were readjusted using the filenames to be for the correct year. 
 
 ```{r Looking at spend by department}
 readd(dept_level_spending_plot)
@@ -89,6 +84,25 @@ readd(spread_plot)
 
 The data presents in the way would expect if there was an increase in reliance on outsourcing providers. To account for multiple payments to the same creditor in the same month driving down the average we have totalled up the spending on each creditor within each month, then determining the mean payment per month from that value. 
 
+
+## Outgoing changes over time
+
+Looking into the way that the council spends money overall, we can plot the cumulative amount spent over the course of the data.
+
+```{r cumulative spending}
+
+
+readd(date_level_spending_plot)
+```
+
+The appearance here is that the spending over time is relatively constant, however, given the size of the expenditures involved, the scaling could easily be concealing some significant changes in spending rate per month. 
+
+```{r looking into the monthly spend change}
+
+readd(monthly_spending_plot)
+```
+
+There is indeed a fairly clear trend of increased monthly spending, thouigh of course subject to the normal ebbs and flows of real world requirements. An increase in spending ought to be expected considering the assumed population growth in the council's territory. 
 
 ## Sources
 

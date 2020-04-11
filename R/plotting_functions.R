@@ -56,6 +56,26 @@ csr_PurPlotCumulativeSpend <- function(input_ds){
 }
 
 
+# Plotting Monthly Spend --------------------------------------------------
+
+csr_PurPlotMonthlySpend <- function(input_ds){
+        input_ds %>% 
+                ggplot(aes(x = payment.month, y = total.payment)) +
+                geom_point() +
+                geom_smooth(method = "lm", formula = y~x)+
+                scale_y_continuous(
+                        labels = function(x) scales::dollar(x, prefix = `Encoding<-`("£", "UTF-8"))
+                        )+
+                theme_wsj()  +
+                theme(
+                        plot.subtitle = element_text(size = rel(0.65))
+                        , plot.title.position = "plot"
+                ) +
+                labs(
+                        title = "Monthly Spending"
+                        , subtitle = csr_UtilTitleWrapper("How much is spent each month and how does this change over time?" , width = 50)
+                )
+}
 
 # Plotting Departmental spend ---------------------------------------------
 
