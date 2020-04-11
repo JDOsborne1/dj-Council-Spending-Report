@@ -101,6 +101,9 @@ reporting_plan <- drake_plan(
 
         , spread_data = Output_refined %>% 
         csr_PurAggregatePaymentSpread()
+
+        , spread_plot = spread_data %>% 
+        csr_PurPlotSpread()
         
 
 # Rendering Reports -------------------------------------------------------

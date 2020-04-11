@@ -103,3 +103,12 @@ csr_PutPlotVoluntaryGrantSpend <- function(input_ds){
                         , subtitle = csr_UtilTitleWrapper("How much is spent on voluntary grants each month?" , width = 50)
                 )
 }
+
+
+
+# Plotting Spread of Spending ---------------------------------------------
+
+csr_PurPlotSpread <- function(input_ds){
+        NULL
+}
+
