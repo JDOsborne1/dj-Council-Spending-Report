@@ -65,7 +65,14 @@ csr_PurAggregateCumulativeSpending <- function(input_ds){
 }
 
 csr_PurAggregateMonthlySpend <- function(input_ds){
-        NULL
+        input_ds %>% 
+                # Removing one record where there is a genuine null value in the source data
+                filter(!(Ref.no == "3532" & Payment.date == "2012-03-27")) %>% 
+                mutate(payment.month = lubridate::floor_date(Payment.date, unit = "month")) %>% 
+                group_by(payment.month) %>% 
+                summarise(
+                        total.payment = sum(Amount.Paid)
+                )
 }
 
 # Payment Spread Tracking -------------------------------------------------
