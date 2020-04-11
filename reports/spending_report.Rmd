@@ -97,6 +97,11 @@ readd(date_level_spending_plot)
 
 The appearance here is that the spending over time is relatively constant, however, given the size of the expenditures involved, the scaling could easily be concealing some significant changes in spending rate per month. 
 
+```{r looking into the monthly spend change}
+
+readd(monthly_spending_plot)
+```
+
 
 
 ## Sources
