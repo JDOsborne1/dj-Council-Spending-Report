@@ -102,7 +102,7 @@ The appearance here is that the spending over time is relatively constant, howev
 readd(monthly_spending_plot)
 ```
 
-
+There is indeed a fairly clear trend of increased monthly spending, thouigh of course subject to the normal ebbs and flows of real world requirements. An increase in spending ought to be expected considering the assumed population growth in the council's territory. 
 
 ## Sources
 
