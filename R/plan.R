@@ -90,11 +90,24 @@ reporting_plan <- drake_plan(
 # Voluntary Composition over time -----------------------------------------
 
         , voluntary_data = Output_refined %>%
-        csr_PurAggregateVoluntaryGrants
+                csr_PurAggregateVoluntaryGrants()
 
         , voluntary_plot = voluntary_data %>% 
-        csr_PutPlotVoluntaryGrantSpend()
+                csr_PutPlotVoluntaryGrantSpend()
+
+
+
+# Spread of payments ------------------------------------------------------
+
+        , spread_data = Output_refined %>% 
+                csr_PurAggregatePaymentSpread()
+
+        , spread_plot = spread_data %>% 
+                csr_PurPlotSpread()
         
+
+        , investigation_into_payment_gradients = Output_refined %>% 
+                csr_PurInvestigatePaymentGradients()
 
 # Rendering Reports -------------------------------------------------------
 

@@ -79,6 +79,17 @@ readd(voluntary_plot)
 It turns out that neither are the case. While the amount paid in any given month fluctuates wildly, the month on month trend is flat. This indicates that there is no, or minimal, consistent change in the amounts paid in grants to voluntary bodies. 
 
 
+## Distribution of spending
+
+Another hypothesis I have is that the council will be increasingly reliant on outsourcing measures to try to make efficiencies in an ever reducing budget. The way I'd expect that to manifest is in an increase in the average payment value each month, as more services are centralised under an outsourcing provider. It's important to consider that this may be a consequence of the larger, already centralised services taking up a greater proportion of the council's finite budget, and outright squeezing out the funds for the more distributed tasks that the council normall takes care of. 
+
+```{r}
+readd(spread_plot)
+```
+
+The data presents in the way would expect if there was an increase in reliance on outsourcing providers. To account for multiple payments to the same creditor in the same month driving down the average we have totalled up the spending on each creditor within each month, then determining the mean payment per month from that value. 
+
+
 ## Sources
 
 Below is a list of sources consulted in the generation of the report. Not all the sources contributed any unique content, but they have all been kept for their value to future investigations. 
