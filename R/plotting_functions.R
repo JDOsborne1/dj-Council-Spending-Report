@@ -59,7 +59,9 @@ csr_PurPlotCumulativeSpend <- function(input_ds){
 # Plotting Monthly Spend --------------------------------------------------
 
 csr_PurPlotMonthlySpend <- function(input_ds){
-        NULL
+        input_ds %>% 
+                ggplot(aes(x = payment.month, y = total.payment)) +
+                geom_point() 
 }
 
 # Plotting Departmental spend ---------------------------------------------
