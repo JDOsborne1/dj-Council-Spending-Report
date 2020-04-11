@@ -106,6 +106,24 @@ reporting_plan <- drake_plan(
         csr_PurPlotSpread()
         
 
+        , investigation_into_payment_gradients = Output_refined %>% 
+        # Removing one record where there is a genuine null value in the source data
+        filter(!(Ref.no == "3532" & Payment.date == "2012-03-27")) %>% 
+        mutate(payment.month = lubridate::floor_date(Payment.date, unit = "quarter")) %>% 
+        #  normalising many payments to the same creditor in one month
+        group_by(payment.month, Description) %>% 
+        summarise(total.payment = sum(Amount.Paid)) %>% 
+        ungroup()  %>% 
+        group_by(Description) %>% 
+        summarise(
+                first.payment = mean(head(total.payment,4))
+                , last.payment = mean(tail(total.payment, 4))
+                , num.payments = n()
+                ) %>% 
+        mutate(
+                payment.gradient = (last.payment - first.payment)/num.payments/first.payment
+                )
+
 # Rendering Reports -------------------------------------------------------
 
         
