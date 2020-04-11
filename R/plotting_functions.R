@@ -63,6 +63,9 @@ csr_PurPlotMonthlySpend <- function(input_ds){
                 ggplot(aes(x = payment.month, y = total.payment)) +
                 geom_point() +
                 geom_smooth(method = "lm", formula = y~x)+
+                scale_y_continuous(
+                        labels = function(x) scales::dollar(x, prefix = `Encoding<-`("£", "UTF-8"))
+                        )+
                 theme_wsj()  +
                 theme(
                         plot.subtitle = element_text(size = rel(0.65))
