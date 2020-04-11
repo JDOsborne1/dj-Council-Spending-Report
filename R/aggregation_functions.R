@@ -72,10 +72,14 @@ csr_PurAggregatePaymentSpread <- function(input_ds){
         input_ds %>% 
                 # Removing one record where there is a genuine null value in the source data
                 filter(!(Ref.no == "3532" & Payment.date == "2012-03-27")) %>% 
-                mutate(payment.month = lubridate::floor_date(Payment.date, unit = "months")) %>% 
+                mutate(payment.month = lubridate::floor_date(Payment.date, unit = "quarter")) %>% 
+                #  normalising many payments to the same creditor in one month
+                group_by(payment.month, Creditor.name) %>% 
+                summarise(total.payment = sum(Amount.Paid)) %>% 
+                ungroup() %>% 
+                # then aggregating to the mean value per month
                 group_by(payment.month) %>% 
-                summarise(
-                        mean.payment = mean(Amount.Paid)
-                        , num.payees = length(unique(Creditor.name))
-                        )
+                summarise(mean.payment = mean(total.payment))
+        
+        
 }
